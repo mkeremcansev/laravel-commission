@@ -29,7 +29,7 @@ class CommissionType extends Model
     public function getCommissionTypeModelsByModel(Model $model): Collection
     {
         if ($this->hasModel($model) === false) {
-            return new Collection();
+            return new Collection;
         }
 
         return $this->models()

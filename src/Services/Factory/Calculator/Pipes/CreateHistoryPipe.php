@@ -16,7 +16,7 @@ class CreateHistoryPipe
             'model_type' => get_class($model),
             'group_id' => $commissionCalculatorContext->groupId,
             'column' => $model->current_calculation_column,
-            'original_amount' => $model->amount,
+            'original_amount' => $commissionCalculatorContext->originalAmount,
             'calculated_amount' => $commissionCalculatorContext->totalAmount,
             'commission_amount' => $commissionCalculatorContext->commissionAmount,
             'status' => $commissionCalculatorContext->status,

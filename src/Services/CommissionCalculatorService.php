@@ -12,9 +12,7 @@ use Mkeremcansev\LaravelCommission\Models\CommissionTypeModel;
 
 class CommissionCalculatorService
 {
-    public function __construct(public Model $model)
-    {
-    }
+    public function __construct(public Model $model) {}
 
     /**
      * @throws Exception
@@ -26,7 +24,7 @@ class CommissionCalculatorService
         $this->validateColumnsExistence(columns: $columns);
 
         return $columns
-            ->flatMap(function($column) {
+            ->flatMap(function ($column) {
                 $this->setDefaultAttributes(column: $column);
 
                 return $this->getCommissionsForColumn(column: $column);
@@ -41,7 +39,7 @@ class CommissionCalculatorService
     public function validateColumnsExistence(Collection $columns): void
     {
         foreach ($columns as $column) {
-            if (!Schema::hasColumn($this->model->getTable(), $column)) {
+            if (! Schema::hasColumn($this->model->getTable(), $column)) {
                 throw new Exception("Column {$column} does not exist in table {$this->model->getTable()}");
             }
         }
@@ -56,15 +54,15 @@ class CommissionCalculatorService
     public function getCommissionsForColumn(string $column)
     {
         return CommissionType::all()
-            ->filter(fn($commissionType) => $commissionType->hasModel(model: $this->model))
-            ->flatMap(fn($commissionType) => $this->getCommissionsFromType(commissionType: $commissionType, column: $column));
+            ->filter(fn ($commissionType) => $commissionType->hasModel(model: $this->model))
+            ->flatMap(fn ($commissionType) => $this->getCommissionsFromType(commissionType: $commissionType, column: $column));
     }
 
     public function getCommissionsFromType(CommissionType $commissionType, string $column)
     {
         return $commissionType->getCommissionTypeModelsByModel(model: $this->model)
-            ->filter(fn($commissionTypeModel) => $this->isValidCommissionModel(commissionTypeModel: $commissionTypeModel))
-            ->flatMap(fn($commissionTypeModel) => $commissionTypeModel->commissionType->commissions->map(fn($commission) => [
+            ->filter(fn ($commissionTypeModel) => $this->isValidCommissionModel(commissionTypeModel: $commissionTypeModel))
+            ->flatMap(fn ($commissionTypeModel) => $commissionTypeModel->commissionType->commissions->map(fn ($commission) => [
                 'commission' => $commission,
                 'column' => $column,
             ]));

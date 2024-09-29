@@ -11,6 +11,8 @@ class CommissionCalculateHistory extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'commission_id',
         'model_id',

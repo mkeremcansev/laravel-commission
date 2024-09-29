@@ -29,8 +29,9 @@ class PercentageCommissionCalculator extends BaseCalculator implements Commissio
                 'group_id' => $this->model->group_id,
             ])->sum('commission_amount');
 
-            $commissionAmountWithoutHistoryAmount = ($totalCommissionAmountByHistory + $amount) * ($this->commission->rate / 100);
-            $commissionAmount = $commissionAmountWithoutHistoryAmount + $totalCommissionAmountByHistory;
+            $totalCalculableAmount = $totalCommissionAmountByHistory + $amount;
+            $commissionAmountWithoutHistoryAmount = $totalCalculableAmount * ($this->commission->rate / 100);
+            $commissionAmount = $commissionAmountWithoutHistoryAmount;
             $totalAmount = $amount + $commissionAmountWithoutHistoryAmount + $totalCommissionAmountByHistory;
         }
 

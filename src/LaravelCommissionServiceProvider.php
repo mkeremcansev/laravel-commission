@@ -4,7 +4,6 @@ namespace Mkeremcansev\LaravelCommission;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Mkeremcansev\LaravelCommission\Commands\LaravelCommissionCommand;
 
 class LaravelCommissionServiceProvider extends PackageServiceProvider
 {

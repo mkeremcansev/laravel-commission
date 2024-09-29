@@ -1,6 +1,6 @@
+![Laravel Commission](https://github.com/user-attachments/assets/d069ff03-adca-4893-b9ab-e4d8cd4324d8)
 
-
-## Installation![Laravel Commission](https://github.com/user-attachments/assets/d069ff03-adca-4893-b9ab-e4d8cd4324d8)
+## Installation
 
 
 You can install the package via composer:

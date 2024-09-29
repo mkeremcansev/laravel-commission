@@ -12,16 +12,13 @@ use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Pipes\CreateHisto
 
 abstract class BaseCalculator
 {
-    public function __construct(public Commission $commission, public Model $model)
-    {
-
-    }
+    public function __construct(public Commission $commission, public Model $model) {}
 
     public function executePipeline(BaseCommissionCalculatorContext $context): void
     {
         Pipeline::send($context)
             ->through([
-                CreateHistoryPipe::class
+                CreateHistoryPipe::class,
             ])
             ->thenReturn();
     }

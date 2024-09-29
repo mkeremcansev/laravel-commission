@@ -20,8 +20,5 @@ class PercentageCommissionCalculatorContext extends BaseCommissionCalculatorCont
         public CommissionCalculateHistoryReasonEnum $reason,
         public string $groupId,
         public string $column
-    )
-    {
-
-    }
+    ) {}
 }

@@ -20,7 +20,7 @@ class CommissionCalculatorFactory
         return match ($commission->type) {
             CommissionTypeEnum::FIXED => new FixedCommissionCalculator($commission, $model),
             CommissionTypeEnum::PERCENTAGE => new PercentageCommissionCalculator($commission, $model),
-            default => throw new Exception("Invalid commission type"),
+            default => throw new Exception('Invalid commission type'),
         };
     }
 }

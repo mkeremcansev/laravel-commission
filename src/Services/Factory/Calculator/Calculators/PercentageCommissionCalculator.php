@@ -19,7 +19,6 @@ class PercentageCommissionCalculator extends BaseCalculator implements Commissio
         $status = $this->status(amount: $amount);
         $reason = $this->reason(amount: $amount);
 
-
         $commissionAmount = $amount * ($this->commission->rate / 100);
         $totalAmount = $amount + $commissionAmount;
 

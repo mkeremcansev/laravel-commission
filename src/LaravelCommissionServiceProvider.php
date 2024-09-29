@@ -23,7 +23,7 @@ class LaravelCommissionServiceProvider extends PackageServiceProvider
         ], 'laravel-commission-migrations');
 
         $this->publishes([
-            __DIR__.'/../config/laravel-commission.php' => config_path('laravel-commission.php'),
+            __DIR__.'/../config/commission.php' => config_path('commission.php'),
         ], 'laravel-commission-config');
     }
 }

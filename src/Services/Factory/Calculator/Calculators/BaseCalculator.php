@@ -19,6 +19,7 @@ abstract class BaseCalculator
         Pipeline::send($context)
             ->through([
                 CreateHistoryPipe::class,
+                ...config('commission.pipes', []),
             ])
             ->thenReturn();
     }

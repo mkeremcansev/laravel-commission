@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('column');
             $table->unsignedBigInteger('original_amount');
             $table->unsignedBigInteger('calculated_amount');
-            $table->unsignedBigInteger('commission_amount');
+            $table->bigInteger('commission_amount');
             $table->tinyInteger('status');
             $table->tinyInteger('reason')->nullable();
             $table->timestamps();

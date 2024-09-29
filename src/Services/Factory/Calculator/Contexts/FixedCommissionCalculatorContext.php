@@ -19,7 +19,5 @@ class FixedCommissionCalculatorContext extends BaseCommissionCalculatorContext
         public CommissionCalculateHistoryReasonEnum $reason,
         public string $groupId,
         public string $column
-    )
-    {
-    }
+    ) {}
 }

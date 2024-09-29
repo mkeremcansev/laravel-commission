@@ -22,6 +22,7 @@ class CommissionCalculateHistory extends Model
         'commission_amount',
         'status',
         'reason',
+        'created_at',
     ];
 
     protected function casts(): array

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->bigInteger('commission_amount');
             $table->tinyInteger('status');
             $table->tinyInteger('reason')->nullable();
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 

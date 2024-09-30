@@ -3,12 +3,15 @@
 namespace Mkeremcansev\LaravelCommission\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Mkeremcansev\LaravelCommission\Models\CommissionType;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Mkeremcansev\LaravelCommission\Models\CommissionType>
+ * @extends Factory<CommissionType>
  */
 class CommissionTypeFactory extends Factory
 {
+    protected $model = CommissionType::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,7 +20,8 @@ class CommissionTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'description' => $this->faker->text(),
         ];
     }
 }

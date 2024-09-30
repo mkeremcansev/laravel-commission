@@ -21,10 +21,14 @@ trait HasCommission
                 $commission = $commissionByColumn['commission'];
                 $column = $commissionByColumn['column'];
 
-                $calculator = CommissionCalculatorFactory::make($commission, $this);
+                if ($commission->status === false){
+                    return null;
+                }
 
+                $calculator = CommissionCalculatorFactory::make($commission, $this);
                 return $calculator->calculate($this->{$column});
             })
+            ->filter()
             ->toArray();
     }
 }

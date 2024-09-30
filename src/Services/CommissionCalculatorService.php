@@ -45,7 +45,7 @@ class CommissionCalculatorService
         }
     }
 
-    public function setDefaultAttributes(string $column)
+    public function setDefaultAttributes(string $column): void
     {
         $this->model->current_calculation_column = $column;
         $this->model->group_id = Str::uuid()->toString();
@@ -54,15 +54,15 @@ class CommissionCalculatorService
     public function getCommissionsForColumn(string $column)
     {
         return CommissionType::all()
-            ->filter(fn ($commissionType) => $commissionType->hasModel(model: $this->model))
-            ->flatMap(fn ($commissionType) => $this->getCommissionsFromType(commissionType: $commissionType, column: $column));
+            ->filter(fn (CommissionType $commissionType) => $commissionType->hasModel(model: $this->model))
+            ->flatMap(fn (CommissionType $commissionType) => $this->getCommissionsFromType(commissionType: $commissionType, column: $column));
     }
 
     public function getCommissionsFromType(CommissionType $commissionType, string $column)
     {
         return $commissionType->getCommissionTypeModelsByModel(model: $this->model)
-            ->filter(fn ($commissionTypeModel) => $this->isValidCommissionModel(commissionTypeModel: $commissionTypeModel))
-            ->flatMap(fn ($commissionTypeModel) => $commissionTypeModel->commissionType->commissions->map(fn ($commission) => [
+            ->filter(fn (CommissionTypeModel $commissionTypeModel) => $this->isValidCommissionModel(commissionTypeModel: $commissionTypeModel))
+            ->flatMap(fn (CommissionTypeModel $commissionTypeModel) => $commissionTypeModel->commissionType->commissions->map(fn ($commission) => [
                 'commission' => $commission,
                 'column' => $column,
             ]));

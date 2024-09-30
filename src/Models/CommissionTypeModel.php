@@ -16,6 +16,8 @@ class CommissionTypeModel extends Model
         'model_type',
     ];
 
+    public $timestamps = false;
+
     public function commissionType(): BelongsTo
     {
         return $this->belongsTo(CommissionType::class);

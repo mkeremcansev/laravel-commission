@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Pipeline;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
+use Mkeremcansev\LaravelCommission\Enums\CommissionRoundingEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
 use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Contexts\BaseCommissionCalculatorContext;
 use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Pipes\CreateHistoryPipe;
@@ -110,5 +111,14 @@ abstract class BaseCalculator
         }
 
         return CommissionCalculateHistoryReasonEnum::CALCULATED;
+    }
+
+    public function round(float $amount): int
+    {
+        return match ($this->commission->rounding) {
+            CommissionRoundingEnum::UP => ceil($amount),
+            CommissionRoundingEnum::DOWN => floor($amount),
+            default => round($amount),
+        };
     }
 }

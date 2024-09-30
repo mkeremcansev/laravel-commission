@@ -4,6 +4,7 @@ namespace Mkeremcansev\LaravelCommission\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Mkeremcansev\LaravelCommission\Enums\CommissionRoundingEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionTypeEnum;
@@ -44,5 +45,10 @@ class Commission extends Model
     public function histories(): HasMany
     {
         return $this->hasMany(CommissionCalculateHistory::class);
+    }
+
+    public function commissionType(): BelongsTo
+    {
+        return $this->belongsTo(CommissionType::class);
     }
 }

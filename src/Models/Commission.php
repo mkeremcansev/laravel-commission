@@ -5,6 +5,7 @@ namespace Mkeremcansev\LaravelCommission\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Mkeremcansev\LaravelCommission\Enums\CommissionRoundingEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionTypeEnum;
 
 class Commission extends Model
@@ -23,6 +24,7 @@ class Commission extends Model
         'end_date',
         'status',
         'is_total',
+        'rounding',
         'order',
         'created_at',
         'updated_at',
@@ -32,6 +34,7 @@ class Commission extends Model
     {
         return [
             'type' => CommissionTypeEnum::class,
+            'rounding' => CommissionRoundingEnum::class,
             'status' => 'boolean',
             'is_total' => 'boolean',
             'rate' => 'float',

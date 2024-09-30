@@ -11,6 +11,7 @@ class Product extends Model implements HasCommissionInterface
     use HasCommission;
 
     public int $id = 1;
+
     public int $amount = 100;
 
     public function getCommissionableColumns(): array

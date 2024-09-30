@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('commission_calculate_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\Mkeremcansev\LaravelCommission\Models\Commission::class);
+            $table->foreignIdFor(\Mkeremcansev\LaravelCommission\Models\Commission::class)->constrained();
             $table->morphs('model');
             $table->uuid('group_id');
             $table->string('column');

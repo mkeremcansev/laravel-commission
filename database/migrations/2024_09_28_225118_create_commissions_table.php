@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\Mkeremcansev\LaravelCommission\Models\CommissionType::class)->constrained()->cascadeOnDelete();
             $table->decimal('rate', 5, 2)->nullable();
-            $table->unsignedBigInteger('amount')->nullable();
+            $table->bigInteger('amount')->nullable();
             $table->unsignedBigInteger('min_amount')->nullable();
             $table->unsignedBigInteger('max_amount')->nullable();
             $table->tinyInteger('type');
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->timestamp('end_date')->nullable();
             $table->boolean('status');
             $table->boolean('is_total');
+            $table->tinyInteger('rounding');
             $table->integer('order')->default(0);
             $table->timestamps();
         });

@@ -162,7 +162,7 @@ describe('getCommissionsWithColumn()', function () {
                 fn (Expectation|CommissionBundleContext $e) => $e->commission->id->toBe($expectedFixedCommission->id),
                 fn (Expectation|CommissionBundleContext $e) => $e->commission->id->toBe($expectedPercentageCommission->id),
             )
-            ->each(function (Expectation|CommissionBundleContext $context) use ($expectedFixedCommission, $expectedPercentageCommission) {
+            ->each(function (Expectation|CommissionBundleContext $context) {
                 $context
                     ->toBeInstanceOf(CommissionBundleContext::class)
                     ->commission
@@ -208,7 +208,7 @@ describe('getCommissionsWithColumn()', function () {
                 fn (Expectation|CommissionBundleContext $e) => $e->commission->id->toBe($expectedFixedCommission->id),
                 fn (Expectation|CommissionBundleContext $e) => $e->commission->id->toBe($expectedPercentageCommission->id),
             )
-            ->each(function (Expectation|CommissionBundleContext $context) use ($expectedFixedCommission, $expectedPercentageCommission) {
+            ->each(function (Expectation|CommissionBundleContext $context) {
                 $context
                     ->toBeInstanceOf(CommissionBundleContext::class)
                     ->commission

@@ -14,9 +14,9 @@ describe('getCommissionsWithColumn()', function () {
             ->andReturn(true);
     });
     it('returns commissions for custom model type', function () {
-        # Arrange:
+        // Arrange:
         $commissionType = CommissionType::factory()->create();
-        $model = new Product();
+        $model = new Product;
 
         $expectedCommission = Commission::factory()
             ->for($commissionType)
@@ -32,11 +32,11 @@ describe('getCommissionsWithColumn()', function () {
             ->withModel($model, true)
             ->create();
 
-        # Act:
+        // Act:
         $service = new CommissionCalculatorService($model);
         $result = $service->getCommissionsWithColumn('amount');
 
-        # Assert:
+        // Assert:
         expect($result)->toBeArray();
 
         foreach ($result as $commissionBundleContext) {
@@ -56,9 +56,9 @@ describe('getCommissionsWithColumn()', function () {
         }
     });
     it('returns commissions for non-custom model type', function () {
-        # Arrange:
+        // Arrange:
         $commissionType = CommissionType::factory()->create();
-        $model = new Product();
+        $model = new Product;
 
         $expectedCommission = Commission::factory()
             ->for($commissionType)
@@ -74,11 +74,11 @@ describe('getCommissionsWithColumn()', function () {
             ->withModel($model)
             ->create();
 
-        # Act:
+        // Act:
         $service = new CommissionCalculatorService($model);
         $result = $service->getCommissionsWithColumn('amount');
 
-        # Assert:
+        // Assert:
         expect($result)->toBeArray();
 
         foreach ($result as $commissionBundleContext) {
@@ -98,9 +98,9 @@ describe('getCommissionsWithColumn()', function () {
         }
     });
     it('does not return commissions with different model_id for custom model type', function () {
-        # Arrange:
+        // Arrange:
         $commissionType = CommissionType::factory()->create();
-        $model = new Product();
+        $model = new Product;
 
         Commission::factory()
             ->for($commissionType)
@@ -114,36 +114,36 @@ describe('getCommissionsWithColumn()', function () {
                 'model_id' => 100,
             ]);
 
-        # Act:
+        // Act:
         $service = new CommissionCalculatorService($model);
         $result = $service->getCommissionsWithColumn('amount');
 
-        # Assert:
+        // Assert:
         expect($result)->toBeArray()
             ->and($result)->toBeEmpty();
     });
     it('does not return commissions with custom model has no commissions', function () {
-        # Arrange:
+        // Arrange:
         $commissionType = CommissionType::factory()->create();
-        $model = new Product();
+        $model = new Product;
 
         CommissionTypeModel::factory()
             ->for($commissionType)
             ->withModel($model)
             ->create();
 
-        # Act:
+        // Act:
         $service = new CommissionCalculatorService($model);
         $result = $service->getCommissionsWithColumn('amount');
 
-        # Assert:
+        // Assert:
         expect($result)->toBeArray()
             ->and($result)->toBeEmpty();
     });
     it('returns multiple commissions for custom model type', function () {
-        # Arrange:
+        // Arrange:
         $commissionType = CommissionType::factory()->create();
-        $model = new Product();
+        $model = new Product;
 
         $expectedFixedCommission = Commission::factory()
             ->for($commissionType)
@@ -160,11 +160,11 @@ describe('getCommissionsWithColumn()', function () {
             ->withModel($model, true)
             ->create();
 
-        # Act:
+        // Act:
         $service = new CommissionCalculatorService($model);
         $result = $service->getCommissionsWithColumn('amount');
 
-        # Assert:
+        // Assert:
         expect($result)->toBeArray()
             ->and($result)
             ->toHaveCount(2)
@@ -180,9 +180,9 @@ describe('getCommissionsWithColumn()', function () {
             ->toContain($expectedPercentageCommission->id);
     });
     it('returns multiple commissions for non-custom model type', function () {
-        # Arrange:
+        // Arrange:
         $commissionType = CommissionType::factory()->create();
-        $model = new Product();
+        $model = new Product;
 
         $expectedFixedCommission = Commission::factory()
             ->for($commissionType)
@@ -199,11 +199,11 @@ describe('getCommissionsWithColumn()', function () {
             ->withModel($model)
             ->create();
 
-        # Act:
+        // Act:
         $service = new CommissionCalculatorService($model);
         $result = $service->getCommissionsWithColumn('amount');
 
-        # Assert:
+        // Assert:
         expect($result)->toBeArray()
             ->and($result)->toHaveCount(2)
             ->and($result)

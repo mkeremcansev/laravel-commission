@@ -11,7 +11,8 @@ class LaravelCommissionServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-commission')
-            ->hasConfigFile();
+            ->hasConfigFile()
+            ->hasMigrations();
     }
 
     public function boot(): void

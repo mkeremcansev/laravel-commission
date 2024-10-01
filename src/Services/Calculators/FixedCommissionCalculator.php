@@ -1,13 +1,13 @@
 <?php
 
-namespace Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Calculators;
+namespace Mkeremcansev\LaravelCommission\Services\Calculators;
 
 use Exception;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Models\CommissionCalculateHistory;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Contexts\BaseCommissionCalculatorContext;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Contexts\FixedCommissionCalculatorContext;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Contracts\CommissionCalculatorInterface;
+use Mkeremcansev\LaravelCommission\Services\Contexts\BaseCommissionCalculatorContext;
+use Mkeremcansev\LaravelCommission\Services\Contexts\FixedCommissionCalculatorContext;
+use Mkeremcansev\LaravelCommission\Services\Contracts\CommissionCalculatorInterface;
 
 class FixedCommissionCalculator extends BaseCalculator implements CommissionCalculatorInterface
 {
@@ -26,7 +26,7 @@ class FixedCommissionCalculator extends BaseCalculator implements CommissionCalc
             $totalCommissionAmountByHistory = (int) CommissionCalculateHistory::where([
                 'model_id' => $this->model->id,
                 'model_type' => get_class($this->model),
-                'group_id' => $this->model->group_id,
+                'group_id' => $this->model->commission_group_id,
             ])->sum('commission_amount');
 
             $commissionAmount = $totalCommissionAmountByHistory + $this->commission->amount;
@@ -42,7 +42,7 @@ class FixedCommissionCalculator extends BaseCalculator implements CommissionCalc
                 totalAmount: 0,
                 status: $status,
                 reason: $reason,
-                groupId: $this->model->group_id,
+                groupId: $this->model->commission_group_id,
                 column: $this->model->current_calculation_column,
             ),
             CommissionCalculateHistoryStatusEnum::SUCCESS => new FixedCommissionCalculatorContext(
@@ -53,7 +53,7 @@ class FixedCommissionCalculator extends BaseCalculator implements CommissionCalc
                 totalAmount: $totalAmount,
                 status: $status,
                 reason: $reason,
-                groupId: $this->model->group_id,
+                groupId: $this->model->commission_group_id,
                 column: $this->model->current_calculation_column,
             ),
             default => throw new Exception("Invalid status: $status->value"),

@@ -1,9 +1,9 @@
 <?php
 
-namespace Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Pipes;
+namespace Mkeremcansev\LaravelCommission\Services\Pipes;
 
 use Closure;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Contexts\BaseCommissionCalculatorContext;
+use Mkeremcansev\LaravelCommission\Services\Contexts\BaseCommissionCalculatorContext;
 
 class CreateHistoryPipe
 {

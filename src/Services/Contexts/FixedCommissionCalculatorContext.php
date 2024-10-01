@@ -1,13 +1,13 @@
 <?php
 
-namespace Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Contexts;
+namespace Mkeremcansev\LaravelCommission\Services\Contexts;
 
 use Illuminate\Database\Eloquent\Model;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
 
-class PercentageCommissionCalculatorContext extends BaseCommissionCalculatorContext
+class FixedCommissionCalculatorContext extends BaseCommissionCalculatorContext
 {
     public function __construct(
         public Commission $commission,
@@ -15,7 +15,6 @@ class PercentageCommissionCalculatorContext extends BaseCommissionCalculatorCont
         public int $originalAmount,
         public int $commissionAmount,
         public int $totalAmount,
-        public float $rate,
         public CommissionCalculateHistoryStatusEnum $status,
         public CommissionCalculateHistoryReasonEnum $reason,
         public string $groupId,

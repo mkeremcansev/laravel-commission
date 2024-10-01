@@ -4,43 +4,92 @@ namespace Mkeremcansev\LaravelCommission\Services;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Mkeremcansev\LaravelCommission\Contracts\HasCommissionInterface;
+use Mkeremcansev\LaravelCommission\Models\Commission;
 use Mkeremcansev\LaravelCommission\Models\CommissionType;
-use Mkeremcansev\LaravelCommission\Models\CommissionTypeModel;
+use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionBundleContext;
 
 class CommissionCalculatorService
 {
-    public function __construct(public Model $model) {}
+    public array $columns = [];
 
     /**
      * @throws Exception
      */
-    public function getCalculableCommissions(array $columns): array
+    public function __construct(public Model&HasCommissionInterface $model)
     {
-        $columns = collect($columns);
+        $this->columns = $this->model->getCommissionableColumns();
 
-        $this->validateColumnsExistence(columns: $columns);
-
-        return $columns
-            ->flatMap(function ($column) {
-                $this->setDefaultAttributes(column: $column);
-
-                return $this->getCommissionsForColumn(column: $column);
-            })
-            ->filter()
-            ->all();
+        $this->validateColumnsExistence($this->columns);
     }
 
     /**
      * @throws Exception
      */
-    public function validateColumnsExistence(Collection $columns): void
+    public function getCalculableCommissions(): array
+    {
+        $commissions = [];
+
+        foreach ($this->columns as $column) {
+            $this->setDefaultAttributes($column);
+
+            $columnCommissions = $this->getCommissionsWithColumn($column);
+
+            $commissions = array_merge($commissions, $columnCommissions);
+        }
+
+        return $commissions;
+    }
+
+    public function getCommissionsWithColumn(string $column): array
+    {
+        $commissionTypes = CommissionType::query()
+            ->with([
+                'commissionTypeModels',
+                'commissions',
+            ])
+            ->whereHas('commissionTypeModels', function ($query) {
+                $query->where('model_type', get_class($this->model))
+                    ->where(function ($query) {
+                        $query->whereNull('model_id')
+                            ->orWhere('model_id', $this->model->id);
+                    });
+            })
+            ->whereHas('commissions', function ($query) {
+                $query->active();
+            })
+            ->get();
+
+        $commissions = [];
+        foreach ($commissionTypes as $commissionType) {
+
+            $commissionWithColumn = $commissionType->commissions->map(function (Commission $commission) use ($column) {
+                return new CommissionBundleContext(
+                    commission: $commission,
+                    column: $column
+                );
+            })->toArray();
+
+            $commissions = array_merge($commissions, $commissionWithColumn);
+        }
+
+        return $commissions;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function validateColumnsExistence(array $columns): void
     {
         foreach ($columns as $column) {
-            if (! Schema::hasColumn($this->model->getTable(), $column)) {
+            if (Schema::hasColumn($this->model->getTable(), $column) === false) {
                 throw new Exception("Column {$column} does not exist in table {$this->model->getTable()}");
+            }
+
+            if (is_numeric($this->model->{$column}) === false) {
+                throw new Exception("Column {$column} is not numeric");
             }
         }
     }
@@ -48,28 +97,6 @@ class CommissionCalculatorService
     public function setDefaultAttributes(string $column): void
     {
         $this->model->current_calculation_column = $column;
-        $this->model->group_id = Str::uuid()->toString();
-    }
-
-    public function getCommissionsForColumn(string $column)
-    {
-        return CommissionType::all()
-            ->filter(fn (CommissionType $commissionType) => $commissionType->hasModel(model: $this->model))
-            ->flatMap(fn (CommissionType $commissionType) => $this->getCommissionsFromType(commissionType: $commissionType, column: $column));
-    }
-
-    public function getCommissionsFromType(CommissionType $commissionType, string $column)
-    {
-        return $commissionType->getCommissionTypeModelsByModel(model: $this->model)
-            ->filter(fn (CommissionTypeModel $commissionTypeModel) => $this->isValidCommissionModel(commissionTypeModel: $commissionTypeModel))
-            ->flatMap(fn (CommissionTypeModel $commissionTypeModel) => $commissionTypeModel->commissionType->commissions->map(fn ($commission) => [
-                'commission' => $commission,
-                'column' => $column,
-            ]));
-    }
-
-    public function isValidCommissionModel(CommissionTypeModel $commissionTypeModel): bool
-    {
-        return is_null($commissionTypeModel->model_id) || $commissionTypeModel->model_id === $this->model->id;
+        $this->model->commission_group_id = Str::uuid()->toString();
     }
 }

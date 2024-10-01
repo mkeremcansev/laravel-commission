@@ -1,14 +1,14 @@
 <?php
 
-namespace Mkeremcansev\LaravelCommission\Services\Factory\Calculator;
+namespace Mkeremcansev\LaravelCommission\Services;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Mkeremcansev\LaravelCommission\Enums\CommissionTypeEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Calculators\FixedCommissionCalculator;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Calculators\PercentageCommissionCalculator;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Contracts\CommissionCalculatorInterface;
+use Mkeremcansev\LaravelCommission\Services\Calculators\FixedCommissionCalculator;
+use Mkeremcansev\LaravelCommission\Services\Calculators\PercentageCommissionCalculator;
+use Mkeremcansev\LaravelCommission\Services\Contracts\CommissionCalculatorInterface;
 
 class CommissionCalculatorFactory
 {

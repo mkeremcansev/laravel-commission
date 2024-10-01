@@ -3,8 +3,9 @@
 namespace Mkeremcansev\LaravelCommission\Traits;
 
 use Exception;
+use Mkeremcansev\LaravelCommission\Services\CommissionCalculatorFactory;
 use Mkeremcansev\LaravelCommission\Services\CommissionCalculatorService;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\CommissionCalculatorFactory;
+use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionBundleContext;
 
 trait HasCommission
 {
@@ -14,22 +15,10 @@ trait HasCommission
     public function calculate(): array
     {
         $service = new CommissionCalculatorService($this);
-        $commissionsByColumn = collect($service->getCalculableCommissions(columns: $this->getCommissionableColumns()));
+        $commissions = $service->getCalculableCommissions();
 
-        return $commissionsByColumn
-            ->map(function ($commissionByColumn) {
-                $commission = $commissionByColumn['commission'];
-                $column = $commissionByColumn['column'];
-
-                if ($commission->status === false) {
-                    return null;
-                }
-
-                $calculator = CommissionCalculatorFactory::make($commission, $this);
-
-                return $calculator->calculate($this->{$column});
-            })
-            ->filter()
-            ->toArray();
+        return array_map(function (CommissionBundleContext $context) {
+            return CommissionCalculatorFactory::make($context->commission, $this)->calculate($this->{$context->column});
+        }, $commissions);
     }
 }

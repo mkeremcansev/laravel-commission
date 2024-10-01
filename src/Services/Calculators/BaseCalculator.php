@@ -1,6 +1,6 @@
 <?php
 
-namespace Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Calculators;
+namespace Mkeremcansev\LaravelCommission\Services\Calculators;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Pipeline;
@@ -8,8 +8,8 @@ use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionRoundingEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Contexts\BaseCommissionCalculatorContext;
-use Mkeremcansev\LaravelCommission\Services\Factory\Calculator\Pipes\CreateHistoryPipe;
+use Mkeremcansev\LaravelCommission\Services\Contexts\BaseCommissionCalculatorContext;
+use Mkeremcansev\LaravelCommission\Services\Pipes\CreateHistoryPipe;
 
 abstract class BaseCalculator
 {

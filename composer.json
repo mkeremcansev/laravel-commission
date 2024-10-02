@@ -55,7 +55,8 @@
         ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage",
+        "test-coverage": "@test --coverage --min=98",
+        "test-coverage:html": "@test --coverage-html ./coverage/html",
         "format": "vendor/bin/pint"
     },
     "config": {

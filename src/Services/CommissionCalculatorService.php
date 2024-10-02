@@ -97,6 +97,9 @@ class CommissionCalculatorService
     public function setDefaultAttributes(string $column): void
     {
         $this->model->current_calculation_column = $column;
-        $this->model->commission_group_id = Str::uuid()->toString();
+
+        if($this->model->commission_group_id === null){
+            $this->model->commission_group_id = Str::uuid()->toString();
+        }
     }
 }

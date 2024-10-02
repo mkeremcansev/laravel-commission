@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Mkeremcansev\LaravelCommission\Contracts\HasCommissionInterface;
 use Mkeremcansev\LaravelCommission\Traits\HasCommission;
 
-class Product extends Model implements HasCommissionInterface
+class Order extends Model implements HasCommissionInterface
 {
     use HasCommission;
 
@@ -14,10 +14,12 @@ class Product extends Model implements HasCommissionInterface
 
     public int $amount = 100;
 
+    public int $other_column = 200;
+
     public string $fakeColumn = 'fake';
 
     public function getCommissionableColumns(): array
     {
-        return ['amount'];
+        return ['amount', 'other_column'];
     }
 }

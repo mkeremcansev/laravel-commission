@@ -98,7 +98,7 @@ class CommissionCalculatorService
     {
         $this->model->current_calculation_column = $column;
 
-        if($this->model->commission_group_id === null){
+        if ($this->model->commission_group_id === null) {
             $this->model->commission_group_id = Str::uuid()->toString();
         }
     }

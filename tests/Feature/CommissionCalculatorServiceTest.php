@@ -231,7 +231,7 @@ describe('validateColumnsExistence()', function () {
             ->andReturn(false);
 
         // Act & Assert:
-        expect(fn() => (new CommissionCalculatorService($model))
+        expect(fn () => (new CommissionCalculatorService($model))
             ->validateColumnsExistence(['amount'])
         )->toThrow(Exception::class, "Column amount does not exist in table {$model->getTable()}");
     });
@@ -243,9 +243,9 @@ describe('validateColumnsExistence()', function () {
             ->andReturn(true);
 
         // Act & Assert:
-        expect(fn() => (new CommissionCalculatorService($model))
+        expect(fn () => (new CommissionCalculatorService($model))
             ->validateColumnsExistence(['fakeColumn'])
-        )->toThrow(Exception::class, "Column fakeColumn is not numeric");
+        )->toThrow(Exception::class, 'Column fakeColumn is not numeric');
     });
 });
 
@@ -257,7 +257,7 @@ describe('setDefaultAttributes()', function () {
 
     it('can sets default attributes on the model', function () {
         // Arrange:
-        $product = new Product();
+        $product = new Product;
         $column = 'amount';
 
         // Act:
@@ -274,7 +274,7 @@ describe('setDefaultAttributes()', function () {
     });
     it('can sets a valid UUID for commission_group_id', function () {
         // Arrange:
-        $product = new Product();
+        $product = new Product;
         $column = 'amount';
 
         // Act:
@@ -286,7 +286,7 @@ describe('setDefaultAttributes()', function () {
     });
     it('can does not overwrite commission_group_id on subsequent calls', function () {
         // Arrange:
-        $product = new Product();
+        $product = new Product;
 
         // Act:
         $service = new CommissionCalculatorService($product);
@@ -450,5 +450,3 @@ describe('getCalculableCommissions()', function () {
     });
 
 });
-
-

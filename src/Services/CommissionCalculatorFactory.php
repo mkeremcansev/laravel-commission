@@ -5,7 +5,6 @@ namespace Mkeremcansev\LaravelCommission\Services;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Mkeremcansev\LaravelCommission\Enums\CommissionTypeEnum;
-use Mkeremcansev\LaravelCommission\Models\Commission;
 use Mkeremcansev\LaravelCommission\Services\Calculators\FixedCommissionCalculator;
 use Mkeremcansev\LaravelCommission\Services\Calculators\PercentageCommissionCalculator;
 use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionBundleContext;

@@ -14,7 +14,6 @@ use Mkeremcansev\LaravelCommission\Models\CommissionCalculateHistory;
  */
 class CommissionCalculateHistoryFactory extends Factory
 {
-
     protected $model = CommissionCalculateHistory::class;
 
     /**

@@ -4,6 +4,7 @@ namespace Mkeremcansev\LaravelCommission\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 
@@ -33,5 +34,10 @@ class CommissionCalculateHistory extends Model
             'status' => CommissionCalculateHistoryStatusEnum::class,
             'reason' => CommissionCalculateHistoryReasonEnum::class,
         ];
+    }
+
+    public function commission(): BelongsTo
+    {
+        return $this->belongsTo(Commission::class);
     }
 }

@@ -19,44 +19,48 @@ class FixedCommissionCalculator extends BaseCalculator implements CommissionCalc
         $status = $this->status(amount: $amount);
         $reason = $this->reason(amount: $amount);
 
-        $commissionAmount = $this->commission->amount;
+        $commissionAmount = $this->context->commission->amount;
         $totalAmount = $amount + $commissionAmount;
+        $includedPreviousCommissionAmount = 0;
 
-        if ($this->commission->is_total === true) {
+        if ($this->context->commission->is_total === true) {
             $totalCommissionAmountByHistory = (int) CommissionCalculateHistory::where([
                 'model_id' => $this->model->id,
                 'model_type' => get_class($this->model),
-                'group_id' => $this->model->commission_group_id,
+                'group_id' => $this->context->commissionGroupId,
+                'column' => $this->context->column,
             ])->sum('commission_amount');
 
-            $commissionAmount = $totalCommissionAmountByHistory + $this->commission->amount;
-            $totalAmount = $amount + $totalCommissionAmountByHistory + $this->commission->amount;
+            $commissionAmount = $this->context->commission->amount;
+            $includedPreviousCommissionAmount = $totalCommissionAmountByHistory;
+            $totalAmount = $amount + $totalCommissionAmountByHistory + $this->context->commission->amount;
         }
 
         $context = match ($status) {
             CommissionCalculateHistoryStatusEnum::FAILED => new FixedCommissionCalculatorContext(
-                commission: $this->commission,
+                commission: $this->context->commission,
                 model: $this->model,
                 originalAmount: $amount,
                 commissionAmount: 0,
                 totalAmount: 0,
                 status: $status,
                 reason: $reason,
-                groupId: $this->model->commission_group_id,
-                column: $this->model->current_calculation_column,
+                groupId: $this->context->commissionGroupId,
+                column: $this->context->column,
+                includedPreviousCommissionAmount: 0,
             ),
             CommissionCalculateHistoryStatusEnum::SUCCESS => new FixedCommissionCalculatorContext(
-                commission: $this->commission,
+                commission: $this->context->commission,
                 model: $this->model,
                 originalAmount: $amount,
                 commissionAmount: $commissionAmount,
                 totalAmount: $totalAmount,
                 status: $status,
                 reason: $reason,
-                groupId: $this->model->commission_group_id,
-                column: $this->model->current_calculation_column,
+                groupId: $this->context->commissionGroupId,
+                column: $this->context->column,
+                includedPreviousCommissionAmount: $includedPreviousCommissionAmount,
             ),
-            default => throw new Exception("Invalid status: $status->value"),
         };
 
         $this->executePipeline($context);

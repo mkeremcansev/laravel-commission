@@ -31,8 +31,6 @@ You can publish the config file with:
 php artisan vendor:publish --tag="laravel-commission-config"
 ```
 
-# General Information
-
 ## Models
 
 ### 1. CommissionType

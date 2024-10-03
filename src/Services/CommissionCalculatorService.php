@@ -31,11 +31,10 @@ class CommissionCalculatorService
     public function getCalculableCommissions(): array
     {
         $commissions = [];
+        $commissionGroupId = Str::uuid()->toString();
 
         foreach ($this->columns as $column) {
-            $this->setDefaultAttributes($column);
-
-            $columnCommissions = $this->getCommissionsWithColumn($column);
+            $columnCommissions = $this->getCommissionsWithColumn($column, $commissionGroupId);
 
             $commissions = array_merge($commissions, $columnCommissions);
         }
@@ -43,32 +42,29 @@ class CommissionCalculatorService
         return $commissions;
     }
 
-    public function getCommissionsWithColumn(string $column): array
+    public function getCommissionsWithColumn(string $column, string $commissionGroupId): array
     {
         $commissionTypes = CommissionType::query()
-            ->with([
-                'commissionTypeModels',
-                'commissions',
-            ])
-            ->whereHas('commissionTypeModels', function ($query) {
+            ->withWhereHas('commissions', function ($query) {
+                $query->active();
+            })
+            ->withWhereHas('commissionTypeModels', function ($query) {
                 $query->where('model_type', get_class($this->model))
                     ->where(function ($query) {
                         $query->whereNull('model_id')
                             ->orWhere('model_id', $this->model->id);
                     });
             })
-            ->whereHas('commissions', function ($query) {
-                $query->active();
-            })
             ->get();
 
         $commissions = [];
         foreach ($commissionTypes as $commissionType) {
 
-            $commissionWithColumn = $commissionType->commissions->map(function (Commission $commission) use ($column) {
+            $commissionWithColumn = $commissionType->commissions->map(function (Commission $commission) use ($column, $commissionGroupId) {
                 return new CommissionBundleContext(
                     commission: $commission,
-                    column: $column
+                    column: $column,
+                    commissionGroupId: $commissionGroupId
                 );
             })->toArray();
 
@@ -91,15 +87,6 @@ class CommissionCalculatorService
             if (is_numeric($this->model->{$column}) === false) {
                 throw new Exception("Column {$column} is not numeric");
             }
-        }
-    }
-
-    public function setDefaultAttributes(string $column): void
-    {
-        $this->model->current_calculation_column = $column;
-
-        if ($this->model->commission_group_id === null) {
-            $this->model->commission_group_id = Str::uuid()->toString();
         }
     }
 }

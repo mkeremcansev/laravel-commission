@@ -18,6 +18,7 @@ class FixedCommissionCalculatorContext extends BaseCommissionCalculatorContext
         public CommissionCalculateHistoryStatusEnum $status,
         public CommissionCalculateHistoryReasonEnum $reason,
         public string $groupId,
-        public string $column
+        public string $column,
+        public int $includedPreviousCommissionAmount,
     ) {}
 }

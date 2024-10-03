@@ -5,7 +5,6 @@ use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
 use Mkeremcansev\LaravelCommission\Models\CommissionCalculateHistory;
-use Mkeremcansev\LaravelCommission\Services\CommissionCalculatorService;
 use Mkeremcansev\LaravelCommission\Services\Contexts\PercentageCommissionCalculatorContext;
 use Mkeremcansev\LaravelCommission\Services\Pipes\CreateHistoryPipe;
 use Mkeremcansev\LaravelCommission\Tests\Fixtures\Models\Product;
@@ -42,7 +41,7 @@ describe('handle()', function () {
         );
 
         // Act & Assert:
-        (new CreateHistoryPipe())->handle($context, function ($context) {
+        (new CreateHistoryPipe)->handle($context, function ($context) {
             return $context;
         });
 

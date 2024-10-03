@@ -1,10 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Pipeline;
+use Illuminate\Support\Str;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionRoundingEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
+use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionBundleContext;
 use Mkeremcansev\LaravelCommission\Services\Contexts\FixedCommissionCalculatorContext;
 use Mkeremcansev\LaravelCommission\Services\Pipes\CreateHistoryPipe;
 use Mkeremcansev\LaravelCommission\Tests\Fixtures\Calculators\TestCalculator;
@@ -16,9 +18,11 @@ describe('isStarted()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['start_date' => null]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isStarted()
             ->toBeTrue();
     });
@@ -27,9 +31,11 @@ describe('isStarted()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['start_date' => now()->subDay()]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isStarted()
             ->toBeTrue();
     });
@@ -38,9 +44,11 @@ describe('isStarted()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['start_date' => now()->addDay()]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isStarted()
             ->toBeFalse();
     });
@@ -51,9 +59,11 @@ describe('isEnded()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['end_date' => null]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isEnded()
             ->toBeFalse();
     });
@@ -62,9 +72,11 @@ describe('isEnded()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['end_date' => now()->subDay()]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isEnded()
             ->toBeTrue();
     });
@@ -73,9 +85,11 @@ describe('isEnded()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['end_date' => now()->addDay()]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isEnded()
             ->toBeFalse();
     });
@@ -86,9 +100,11 @@ describe('isActive()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['status' => true]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isActive()
             ->toBeTrue();
     });
@@ -97,9 +113,11 @@ describe('isActive()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['status' => false]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isActive()
             ->toBeFalse();
     });
@@ -110,9 +128,11 @@ describe('isInRange()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => null, 'max_amount' => null]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isInRange(100)
             ->toBeTrue();
     });
@@ -121,9 +141,11 @@ describe('isInRange()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => null, 'max_amount' => 200]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isInRange(100)
             ->toBeTrue();
     });
@@ -132,9 +154,11 @@ describe('isInRange()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => 100, 'max_amount' => null]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isInRange(200)
             ->toBeTrue();
     });
@@ -143,9 +167,11 @@ describe('isInRange()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => 100, 'max_amount' => 200]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isInRange(150)
             ->toBeTrue();
     });
@@ -154,9 +180,11 @@ describe('isInRange()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => 100, 'max_amount' => 200]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isInRange(50)
             ->toBeFalse();
     });
@@ -165,9 +193,11 @@ describe('isInRange()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => 100, 'max_amount' => 200]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isInRange(250)
             ->toBeFalse();
     });
@@ -178,9 +208,11 @@ describe('isAmountAboveMin()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => null]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isAmountAboveMin(100)
             ->toBeTrue();
     });
@@ -189,9 +221,11 @@ describe('isAmountAboveMin()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => 100]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isAmountAboveMin(100)
             ->toBeTrue();
     });
@@ -200,9 +234,11 @@ describe('isAmountAboveMin()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => 100]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isAmountAboveMin(200)
             ->toBeTrue();
     });
@@ -211,9 +247,11 @@ describe('isAmountAboveMin()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['min_amount' => 100]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isAmountAboveMin(50)
             ->toBeFalse();
     });
@@ -224,9 +262,11 @@ describe('isAmountBelowMax()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['max_amount' => null]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isAmountBelowMax(100)
             ->toBeTrue();
     });
@@ -235,9 +275,11 @@ describe('isAmountBelowMax()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['max_amount' => 100]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isAmountBelowMax(100)
             ->toBeTrue();
     });
@@ -246,9 +288,11 @@ describe('isAmountBelowMax()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['max_amount' => 100]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isAmountBelowMax(50)
             ->toBeTrue();
     });
@@ -257,9 +301,11 @@ describe('isAmountBelowMax()', function () {
         // Arrange:
         $commission = Commission::factory()->make(['max_amount' => 100]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->isAmountBelowMax(150)
             ->toBeFalse();
     });
@@ -276,9 +322,11 @@ describe('status()', function () {
             'max_amount' => 200,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->status(150)
             ->toBeInstanceOf(CommissionCalculateHistoryStatusEnum::class)
             ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS);
@@ -290,9 +338,11 @@ describe('status()', function () {
             'status' => false,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->status(150)
             ->toBeInstanceOf(CommissionCalculateHistoryStatusEnum::class)
             ->toBe(CommissionCalculateHistoryStatusEnum::FAILED);
@@ -304,9 +354,11 @@ describe('status()', function () {
             'start_date' => now()->addDay(),
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->status(150)
             ->toBeInstanceOf(CommissionCalculateHistoryStatusEnum::class)
             ->toBe(CommissionCalculateHistoryStatusEnum::FAILED);
@@ -318,9 +370,11 @@ describe('status()', function () {
             'end_date' => now()->subDay(),
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->status(150)
             ->toBeInstanceOf(CommissionCalculateHistoryStatusEnum::class)
             ->toBe(CommissionCalculateHistoryStatusEnum::FAILED);
@@ -332,9 +386,11 @@ describe('status()', function () {
             'min_amount' => 100,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->status(50)
             ->toBeInstanceOf(CommissionCalculateHistoryStatusEnum::class)
             ->toBe(CommissionCalculateHistoryStatusEnum::FAILED);
@@ -346,9 +402,11 @@ describe('status()', function () {
             'max_amount' => 100,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->status(150)
             ->toBeInstanceOf(CommissionCalculateHistoryStatusEnum::class)
             ->toBe(CommissionCalculateHistoryStatusEnum::FAILED);
@@ -361,9 +419,11 @@ describe('status()', function () {
             'max_amount' => 200,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->status(250)
             ->toBeInstanceOf(CommissionCalculateHistoryStatusEnum::class)
             ->toBe(CommissionCalculateHistoryStatusEnum::FAILED);
@@ -375,9 +435,11 @@ describe('status()', function () {
             'end_date' => now()->subDay(),
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->status(150)
             ->toBeInstanceOf(CommissionCalculateHistoryStatusEnum::class)
             ->toBe(CommissionCalculateHistoryStatusEnum::FAILED);
@@ -391,9 +453,11 @@ describe('reason()', function () {
             'status' => false,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->reason(150)
             ->toBeInstanceOf(CommissionCalculateHistoryReasonEnum::class)
             ->toBe(CommissionCalculateHistoryReasonEnum::INACTIVE);
@@ -405,9 +469,11 @@ describe('reason()', function () {
             'start_date' => now()->addDay(),
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->reason(150)
             ->toBeInstanceOf(CommissionCalculateHistoryReasonEnum::class)
             ->toBe(CommissionCalculateHistoryReasonEnum::NOT_STARTED);
@@ -419,9 +485,11 @@ describe('reason()', function () {
             'end_date' => now()->subDay(),
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->reason(150)
             ->toBeInstanceOf(CommissionCalculateHistoryReasonEnum::class)
             ->toBe(CommissionCalculateHistoryReasonEnum::ENDED);
@@ -434,9 +502,11 @@ describe('reason()', function () {
             'max_amount' => 200,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->reason(250)
             ->toBeInstanceOf(CommissionCalculateHistoryReasonEnum::class)
             ->toBe(CommissionCalculateHistoryReasonEnum::OUT_OF_RANGE);
@@ -452,9 +522,11 @@ describe('reason()', function () {
             'max_amount' => 200,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->reason(150)
             ->toBeInstanceOf(CommissionCalculateHistoryReasonEnum::class)
             ->toBe(CommissionCalculateHistoryReasonEnum::CALCULATED);
@@ -468,9 +540,11 @@ describe('round()', function () {
             'rounding' => CommissionRoundingEnum::UP,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->round(100.50)
             ->toBe(101);
     });
@@ -481,9 +555,11 @@ describe('round()', function () {
             'rounding' => CommissionRoundingEnum::DOWN,
         ]);
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         // Act & Assert:
-        expect(new TestCalculator($commission, $model))
+        expect(new TestCalculator($bundleContext, $model))
             ->round(100.50)
             ->toBe(100);
     });
@@ -496,6 +572,8 @@ describe('executePipeline()', function () {
             ->withFixedCommission()
             ->create();
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         $context = new FixedCommissionCalculatorContext(
             commission: $commission,
@@ -507,6 +585,7 @@ describe('executePipeline()', function () {
             reason: fake()->randomElement(CommissionCalculateHistoryReasonEnum::cases()),
             groupId: 'group-id',
             column: 'column',
+            includedPreviousCommissionAmount: 0,
         );
 
         Pipeline::shouldReceive('send')->once()->with($context)->andReturnSelf();
@@ -516,7 +595,7 @@ describe('executePipeline()', function () {
         Pipeline::shouldReceive('thenReturn')->once()->andReturn($context);
 
         // Act & Assert:
-        (new TestCalculator($commission, $model))->executePipeline($context);
+        (new TestCalculator($bundleContext, $model))->executePipeline($context);
     });
 
     it('can execute pipelines with custom pipes', function () {
@@ -525,6 +604,8 @@ describe('executePipeline()', function () {
             ->withFixedCommission()
             ->create();
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
 
         $context = new FixedCommissionCalculatorContext(
             commission: $commission,
@@ -536,6 +617,7 @@ describe('executePipeline()', function () {
             reason: fake()->randomElement(CommissionCalculateHistoryReasonEnum::cases()),
             groupId: 'group-id',
             column: 'column',
+            includedPreviousCommissionAmount: 0,
         );
 
         config()->set('commission.pipes', [
@@ -550,6 +632,6 @@ describe('executePipeline()', function () {
         Pipeline::shouldReceive('thenReturn')->once()->andReturn($context);
 
         // Act & Assert:
-        (new TestCalculator($commission, $model))->executePipeline($context);
+        (new TestCalculator($bundleContext, $model))->executePipeline($context);
     });
 });

@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Str;
 use Mkeremcansev\LaravelCommission\Models\Commission;
 use Mkeremcansev\LaravelCommission\Services\CommissionCalculatorFactory;
 use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionBundleContext;

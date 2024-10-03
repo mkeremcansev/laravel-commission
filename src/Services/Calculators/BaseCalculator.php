@@ -7,13 +7,13 @@ use Illuminate\Support\Facades\Pipeline;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionRoundingEnum;
-use Mkeremcansev\LaravelCommission\Models\Commission;
 use Mkeremcansev\LaravelCommission\Services\Contexts\BaseCommissionCalculatorContext;
+use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionBundleContext;
 use Mkeremcansev\LaravelCommission\Services\Pipes\CreateHistoryPipe;
 
 abstract class BaseCalculator
 {
-    public function __construct(public Commission $commission, public Model $model) {}
+    public function __construct(public CommissionBundleContext $context, public Model $model) {}
 
     public function executePipeline(BaseCommissionCalculatorContext $context): void
     {
@@ -27,38 +27,38 @@ abstract class BaseCalculator
 
     public function isStarted(): bool
     {
-        if ($this->commission->start_date === null) {
+        if ($this->context->commission->start_date === null) {
             return true;
         }
 
-        return $this->commission->start_date <= now();
+        return $this->context->commission->start_date <= now();
     }
 
     public function isEnded(): bool
     {
-        if ($this->commission->end_date === null) {
+        if ($this->context->commission->end_date === null) {
             return false;
         }
 
-        return $this->commission->end_date <= now();
+        return $this->context->commission->end_date <= now();
     }
 
     public function isActive(): bool
     {
-        return $this->commission->status;
+        return $this->context->commission->status;
     }
 
     public function isInRange(int $amount): bool
     {
-        if ($this->commission->min_amount === null && $this->commission->max_amount === null) {
+        if ($this->context->commission->min_amount === null && $this->context->commission->max_amount === null) {
             return true;
         }
 
-        if ($this->commission->min_amount === null) {
+        if ($this->context->commission->min_amount === null) {
             return $this->isAmountBelowMax(amount: $amount);
         }
 
-        if ($this->commission->max_amount === null) {
+        if ($this->context->commission->max_amount === null) {
             return $this->isAmountAboveMin(amount: $amount);
         }
 
@@ -67,20 +67,20 @@ abstract class BaseCalculator
 
     public function isAmountAboveMin(int $amount): bool
     {
-        if ($this->commission->min_amount === null) {
+        if ($this->context->commission->min_amount === null) {
             return true;
         }
 
-        return $this->commission->min_amount <= $amount;
+        return $this->context->commission->min_amount <= $amount;
     }
 
     public function isAmountBelowMax(int $amount): bool
     {
-        if ($this->commission->max_amount === null) {
+        if ($this->context->commission->max_amount === null) {
             return true;
         }
 
-        return $amount <= $this->commission->max_amount;
+        return $amount <= $this->context->commission->max_amount;
     }
 
     public function status(int $amount): CommissionCalculateHistoryStatusEnum
@@ -115,7 +115,7 @@ abstract class BaseCalculator
 
     public function round(float $amount): int
     {
-        return match ($this->commission->rounding) {
+        return match ($this->context->commission->rounding) {
             CommissionRoundingEnum::UP => ceil($amount),
             CommissionRoundingEnum::DOWN => floor($amount),
             default => round($amount),

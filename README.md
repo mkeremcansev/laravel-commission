@@ -48,18 +48,19 @@ This model stores individual commission records associated with a `CommissionTyp
 **Attributes:**
 - `id`: The unique identifier for the commission.
 - `commission_type_id`: Foreign key referencing the `CommissionType`.
-- `rate`: The percentage rate of the commission (e.g., 10.00%).
-- `amount`: The specific amount associated with this commission (e.g., 1000 = $10.00).
-- `min_amount`: The minimum amount threshold for applying this commission.
-- `max_amount`: The maximum amount threshold for applying this commission.
+- `rate`: The percentage rate of the commission (e.g., 10.00%). This field is determined based on the `type` column.
+- `amount`: The specific amount associated with this commission (e.g., 1000 = $10.00). This field is determined based on the `type` column.
+- `min_amount`: The minimum amount threshold for applying this commission. **(Optional)**
+- `max_amount`: The maximum amount threshold for applying this commission. **(Optional)**
 - `type`: The type of commission, which uses `\Mkeremcansev\LaravelCommission\Enums\CommissionTypeEnum` to define the type (e.g., percentage-based or fixed).
-- `start_date`: The start date for when this commission becomes active.
-- `end_date`: The end date for when this commission is no longer active.
+- `start_date`: The start date for when this commission becomes active. **(Optional)**
+- `end_date`: The end date for when this commission is no longer active. **(Optional)**
 - `status`: A boolean value indicating whether the commission is currently active.
 - `is_total`: A boolean indicating how this commission should be applied. If `true`, the commission is applied on the total amount after previous commissions have been calculated. If `false`, the commission is calculated based only on its own defined amount or rate.
 - `rounding`: The rounding logic used for the commission calculation, which uses the `\Mkeremcansev\LaravelCommission\Enums\CommissionRoundingEnum` to define the rounding strategy.
 - `order`: Defines the order in which commissions should be applied (useful for calculating multiple commissions).
 - `created_at`, `updated_at`: Timestamps for when the commission was created and last updated.
+
 
 
 ### 3. CommissionTypeModel

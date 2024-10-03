@@ -13,9 +13,7 @@ class CommissionCalculationResultContext
         public int $totalAmount = 0,
         public int $originalAmount = 0,
         public string $column = ''
-    )
-    {
-    }
+    ) {}
 
     public function result(): array
     {
@@ -54,5 +52,4 @@ class CommissionCalculationResultContext
 
         return collect($results)->first(fn (self $context) => $context->column === $column);
     }
-
 }

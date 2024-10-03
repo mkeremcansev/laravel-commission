@@ -1,19 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
-use Mkeremcansev\LaravelCommission\Models\CommissionCalculateHistory;
 use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionCalculationResultContext;
 use Mkeremcansev\LaravelCommission\Services\Contexts\FixedCommissionCalculatorContext;
 use Mkeremcansev\LaravelCommission\Services\Contexts\PercentageCommissionCalculatorContext;
-use Mkeremcansev\LaravelCommission\Services\Pipes\CreateHistoryPipe;
 use Mkeremcansev\LaravelCommission\Tests\Fixtures\Models\Product;
 use Pest\Expectation;
 
 describe('result()', function () {
-    it('can return groupped columns with calculation amounts', function (){
+    it('can return groupped columns with calculation amounts', function () {
         $model = new Product;
         $commission = Commission::factory()
             ->withFixedCommission()
@@ -46,7 +43,7 @@ describe('result()', function () {
         $context = new CommissionCalculationResultContext(
             contexts: [
                 $fixedCommissionCalculatorContext,
-                $percentageCommissionCalculatorContext
+                $percentageCommissionCalculatorContext,
             ],
         );
 
@@ -56,80 +53,80 @@ describe('result()', function () {
             ->toHaveCount(1)
             ->sequence(
                 function (Expectation|CommissionCalculationResultContext $context) {
-                $context
-                    ->toBeInstanceOf(CommissionCalculationResultContext::class)
-                    ->totalCommissionAmount
-                    ->toBe(20)
-                    ->totalIncludedPreviousCommissionAmount
-                    ->toBe(0)
-                    ->totalAmount
-                    ->toBe(120)
-                    ->originalAmount
-                    ->toBe(100)
-                    ->column
-                    ->toBe('amount')
-                    ->contexts
-                    ->toBeArray()
-                    ->toHaveCount(2)
-                    ->sequence(
-                        function (Expectation|FixedCommissionCalculatorContext $context) {
-                            $context
-                                ->toBeInstanceOf(FixedCommissionCalculatorContext::class)
-                                ->commission
-                                ->toBeInstanceOf(Commission::class)
-                                ->model
-                                ->toBeInstanceOf(Product::class)
-                                ->originalAmount
-                                ->toBe(100)
-                                ->commissionAmount
-                                ->toBe(10)
-                                ->totalAmount
-                                ->toBe(110)
-                                ->status
-                                ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS)
-                                ->reason
-                                ->toBe(CommissionCalculateHistoryReasonEnum::CALCULATED)
-                                ->groupId
-                                ->toBe('fixed_commission')
-                                ->column
-                                ->toBe('amount')
-                                ->includedPreviousCommissionAmount
-                                ->toBe(0);
-                        },
-                        function (Expectation|PercentageCommissionCalculatorContext $context) {
-                            $context
-                                ->toBeInstanceOf(PercentageCommissionCalculatorContext::class)
-                                ->commission
-                                ->toBeInstanceOf(Commission::class)
-                                ->model
-                                ->toBeInstanceOf(Product::class)
-                                ->originalAmount
-                                ->toBe(100)
-                                ->commissionAmount
-                                ->toBe(10)
-                                ->totalAmount
-                                ->toBe(110)
-                                ->rate
-                                ->toBe(10.00)
-                                ->status
-                                ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS)
-                                ->reason
-                                ->toBe(CommissionCalculateHistoryReasonEnum::CALCULATED)
-                                ->groupId
-                                ->toBe('percentage_commission')
-                                ->column
-                                ->toBe('amount')
-                                ->includedPreviousCommissionAmount
-                                ->toBe(0);
-                        }
-                    );
-            }
+                    $context
+                        ->toBeInstanceOf(CommissionCalculationResultContext::class)
+                        ->totalCommissionAmount
+                        ->toBe(20)
+                        ->totalIncludedPreviousCommissionAmount
+                        ->toBe(0)
+                        ->totalAmount
+                        ->toBe(120)
+                        ->originalAmount
+                        ->toBe(100)
+                        ->column
+                        ->toBe('amount')
+                        ->contexts
+                        ->toBeArray()
+                        ->toHaveCount(2)
+                        ->sequence(
+                            function (Expectation|FixedCommissionCalculatorContext $context) {
+                                $context
+                                    ->toBeInstanceOf(FixedCommissionCalculatorContext::class)
+                                    ->commission
+                                    ->toBeInstanceOf(Commission::class)
+                                    ->model
+                                    ->toBeInstanceOf(Product::class)
+                                    ->originalAmount
+                                    ->toBe(100)
+                                    ->commissionAmount
+                                    ->toBe(10)
+                                    ->totalAmount
+                                    ->toBe(110)
+                                    ->status
+                                    ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS)
+                                    ->reason
+                                    ->toBe(CommissionCalculateHistoryReasonEnum::CALCULATED)
+                                    ->groupId
+                                    ->toBe('fixed_commission')
+                                    ->column
+                                    ->toBe('amount')
+                                    ->includedPreviousCommissionAmount
+                                    ->toBe(0);
+                            },
+                            function (Expectation|PercentageCommissionCalculatorContext $context) {
+                                $context
+                                    ->toBeInstanceOf(PercentageCommissionCalculatorContext::class)
+                                    ->commission
+                                    ->toBeInstanceOf(Commission::class)
+                                    ->model
+                                    ->toBeInstanceOf(Product::class)
+                                    ->originalAmount
+                                    ->toBe(100)
+                                    ->commissionAmount
+                                    ->toBe(10)
+                                    ->totalAmount
+                                    ->toBe(110)
+                                    ->rate
+                                    ->toBe(10.00)
+                                    ->status
+                                    ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS)
+                                    ->reason
+                                    ->toBe(CommissionCalculateHistoryReasonEnum::CALCULATED)
+                                    ->groupId
+                                    ->toBe('percentage_commission')
+                                    ->column
+                                    ->toBe('amount')
+                                    ->includedPreviousCommissionAmount
+                                    ->toBe(0);
+                            }
+                        );
+                }
             );
     });
 });
 
 describe('get()', function () {
-    it('can return coming parameter calculation amount', function (){
+    it('can return coming parameter calculation amount', function () {
         $model = new Product;
         $commission = Commission::factory()
             ->withFixedCommission()
@@ -162,7 +159,7 @@ describe('get()', function () {
         $context = new CommissionCalculationResultContext(
             contexts: [
                 $fixedCommissionCalculatorContext,
-                $percentageCommissionCalculatorContext
+                $percentageCommissionCalculatorContext,
             ],
         );
 

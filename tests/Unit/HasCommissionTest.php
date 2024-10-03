@@ -322,7 +322,6 @@ describe('calculate()', function () {
         // Act:
         $result = $model->calculate('amount');
 
-
         // Assert:
         expect($result)
             ->toBeInstanceOf(CommissionCalculationResultContext::class)

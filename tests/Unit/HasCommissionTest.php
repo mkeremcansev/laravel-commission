@@ -126,7 +126,7 @@ describe('calculate()', function () {
             );
     });
 
-    it('can calculate commissions with multiple columns', function() {
+    it('can calculate commissions with multiple columns', function () {
         // Arrange:
         $model = new Order;
 

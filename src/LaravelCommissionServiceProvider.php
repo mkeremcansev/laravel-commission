@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mkeremcansev\LaravelCommission;
 
 use Spatie\LaravelPackageTools\Package;

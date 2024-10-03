@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Mkeremcansev\LaravelCommission\Enums;
 
 use Mkeremcansev\LaravelCommission\Traits\PoweredEnum;

@@ -75,10 +75,6 @@ This model links a `CommissionType` to either a specific model or globally to al
 ### 4. CommissionCalculateHistory
 This model logs each commission calculation, storing details about the original amount, the calculated amount, and the commission applied. It also keeps track of which model the commission was applied to and groups related calculations.
 
-###  Important Note
-
-The data in this table can be deleted after each calculation. The package does not delete it by default, but you can do so. **Recommendation:** Clear the table each time the system is put into maintenance mode. This is advised because there may be ongoing calculations that rely on data from this table, which could lead to incorrect computations.
-
 **Attributes:**
 - `id`: The unique identifier for the history record.
 - `commission_id`: Foreign key referencing the `Commission`.
@@ -92,6 +88,10 @@ The data in this table can be deleted after each calculation. The package does n
 - `status`: The status of the commission calculation. You must use the `\Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum` to define possible statuses (e.g., success, error).
 - `reason`: The reason for the commission calculation outcome (optional). You must use the `\Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum` to define the possible reasons.
 - `created_at`: Timestamp indicating when the commission calculation was recorded.
+
+###  Important Note
+
+The data in this table (CommissionCalculateHistory) can be deleted after each calculation. The package does not delete it by default, but you can do so. **Recommendation:** Clear the table each time the system is put into maintenance mode. This is advised because there may be ongoing calculations that rely on data from this table, which could lead to incorrect computations.
 
 ## Usage
 
@@ -116,6 +116,27 @@ The data in this table can be deleted after each calculation. The package does n
        }
    }
    ```
+   
+4. **Calculate Commissions**: Use the `calculate('price')` method to apply commissions to your model.
+
+   ```php
+   $model = YourModel::find(1);
+   $calculatedCommission = $model->calculate('price');
+   $calculatedCommission->totalCommissionAmount; // The total commission amount applied
+   $calculatedCommission->totalIncludedPreviousCommissionAmount // The total amount including previous commissions
+   $calculatedCommission->totalAmount; // The total amount after commissions
+   $calculatedCommission->originalAmount; // The original amount before commissions
+   ```
+
+###  Important Note
+
+The `calculate()` method returns a `\Mkeremcansev\LaravelCommission\Services\Contexts\CommissionCalculationResultContext` or `array` or `null`.
+
+**Null**: If the model `getCommissionableColumns()` method is return a empty array.
+
+**Array**: If the model `getCommissionableColumns()` method has multiple columns. (Return array of `\Mkeremcansev\LaravelCommission\Services\Contexts\CommissionCalculationResultContext`)
+
+**CommissionCalculationResultContext**: If the model `getCommissionableColumns()` method has only one column.
 
 
 ## Testing

@@ -117,7 +117,7 @@ abstract class BaseCalculator
 
     public function round(float $amount): int
     {
-        return match ($this->context->commission->rounding) {
+        return (int) match ($this->context->commission->rounding) {
             CommissionRoundingEnum::UP => ceil($amount),
             CommissionRoundingEnum::DOWN => floor($amount),
             default => round($amount),

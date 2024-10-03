@@ -19,14 +19,16 @@ class PercentageCommissionCalculator extends BaseCalculator implements Commissio
         $status = $this->status(amount: $amount);
         $reason = $this->reason(amount: $amount);
 
-        $commissionAmount = $amount * ($this->commission->rate / 100);
+        $commissionAmount = $amount * ($this->context->commission->rate / 100);
         $totalAmount = $amount + $commissionAmount;
+        $includedPreviousCommissionAmount = 0;
 
-        if ($this->commission->is_total === true) {
+        if ($this->context->commission->is_total === true) {
             $totalCommissionAmountByHistory = (int) CommissionCalculateHistory::where([
                 'model_id' => $this->model->id,
                 'model_type' => get_class($this->model),
-                'group_id' => $this->model->commission_group_id,
+                'group_id' => $this->context->commissionGroupId,
+                'column' => $this->context->column,
             ])->sum('commission_amount');
 
             /**
@@ -39,9 +41,11 @@ class PercentageCommissionCalculator extends BaseCalculator implements Commissio
              * Here we calculate the total commission amount
              * The total amount that can be calculated * the rate of the commission
              */
-            $totalCommissionAmount = $totalCalculableAmount * ($this->commission->rate / 100);
+            $totalCommissionAmount = $totalCalculableAmount * ($this->context->commission->rate / 100);
 
             $commissionAmount = $totalCommissionAmount;
+
+            $includedPreviousCommissionAmount = $totalCommissionAmountByHistory;
 
             /**
              * Here we calculate the total amount
@@ -50,34 +54,36 @@ class PercentageCommissionCalculator extends BaseCalculator implements Commissio
             $totalAmount = $amount + $totalCommissionAmount + $totalCommissionAmountByHistory;
         }
 
+        $commissionAmount = $this->round($commissionAmount);
         $totalAmount = $this->round($totalAmount);
 
         $context = match ($status) {
             CommissionCalculateHistoryStatusEnum::FAILED => new PercentageCommissionCalculatorContext(
-                commission: $this->commission,
+                commission: $this->context->commission,
                 model: $this->model,
                 originalAmount: $amount,
                 commissionAmount: 0,
                 totalAmount: 0,
-                rate: $this->commission->rate,
+                rate: $this->context->commission->rate,
                 status: $status,
                 reason: $reason,
-                groupId: $this->model->commission_group_id,
-                column: $this->model->current_calculation_column,
+                groupId: $this->context->commissionGroupId,
+                column: $this->context->column,
+                includedPreviousCommissionAmount: 0,
             ),
             CommissionCalculateHistoryStatusEnum::SUCCESS => new PercentageCommissionCalculatorContext(
-                commission: $this->commission,
+                commission: $this->context->commission,
                 model: $this->model,
                 originalAmount: $amount,
                 commissionAmount: $commissionAmount,
                 totalAmount: $totalAmount,
-                rate: $this->commission->rate,
+                rate: $this->context->commission->rate,
                 status: $status,
                 reason: $reason,
-                groupId: $this->model->commission_group_id,
-                column: $this->model->current_calculation_column,
+                groupId: $this->context->commissionGroupId,
+                column: $this->context->column,
+                includedPreviousCommissionAmount: $includedPreviousCommissionAmount,
             ),
-            default => throw new Exception("Invalid status: $status->value"),
         };
 
         $this->executePipeline($context);

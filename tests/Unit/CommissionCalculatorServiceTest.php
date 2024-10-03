@@ -21,6 +21,7 @@ describe('getCommissionsWithColumn()', function () {
         // Arrange:
         $commissionType = CommissionType::factory()->create();
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
 
         $expectedCommission = Commission::factory()
             ->for($commissionType)
@@ -38,7 +39,7 @@ describe('getCommissionsWithColumn()', function () {
 
         // Act & Assert:
         expect(new CommissionCalculatorService($model))
-            ->getCommissionsWithColumn('amount')
+            ->getCommissionsWithColumn('amount', $commissionGroupId)
             ->toBeArray()
             ->each(function (Expectation|CommissionBundleContext $context) use ($commissionType, $expectedCommission) {
                 $context
@@ -57,6 +58,7 @@ describe('getCommissionsWithColumn()', function () {
         // Arrange:
         $commissionType = CommissionType::factory()->create();
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
 
         $expectedCommission = Commission::factory()
             ->for($commissionType)
@@ -74,7 +76,7 @@ describe('getCommissionsWithColumn()', function () {
 
         // Act & Assert:
         expect(new CommissionCalculatorService($model))
-            ->getCommissionsWithColumn('amount')
+            ->getCommissionsWithColumn('amount', $commissionGroupId)
             ->toBeArray()
             ->each(function (Expectation|CommissionBundleContext $context) use ($commissionType, $expectedCommission) {
                 $context
@@ -93,6 +95,7 @@ describe('getCommissionsWithColumn()', function () {
         // Arrange:
         $commissionType = CommissionType::factory()->create();
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
 
         Commission::factory()
             ->for($commissionType)
@@ -108,7 +111,7 @@ describe('getCommissionsWithColumn()', function () {
 
         // Act && Assert:
         expect(new CommissionCalculatorService($model))
-            ->getCommissionsWithColumn('amount')
+            ->getCommissionsWithColumn('amount', $commissionGroupId)
             ->toBeArray()
             ->toBeEmpty();
     });
@@ -116,6 +119,7 @@ describe('getCommissionsWithColumn()', function () {
         // Arrange:
         $commissionType = CommissionType::factory()->create();
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
 
         CommissionTypeModel::factory()
             ->for($commissionType)
@@ -124,7 +128,7 @@ describe('getCommissionsWithColumn()', function () {
 
         // Act & Assert:
         expect(new CommissionCalculatorService($model))
-            ->getCommissionsWithColumn('amount')
+            ->getCommissionsWithColumn('amount', $commissionGroupId)
             ->toBeArray()
             ->toBeEmpty();
     });
@@ -132,6 +136,7 @@ describe('getCommissionsWithColumn()', function () {
         // Arrange:
         $commissionType = CommissionType::factory()->create();
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
 
         $expectedFixedCommission = Commission::factory()
             ->for($commissionType)
@@ -158,7 +163,7 @@ describe('getCommissionsWithColumn()', function () {
 
         // Act & Assert:
         expect(new CommissionCalculatorService($model))
-            ->getCommissionsWithColumn('amount')
+            ->getCommissionsWithColumn('amount', $commissionGroupId)
             ->toBeArray()
             ->toHaveCount(2)
             ->sequence(
@@ -178,6 +183,7 @@ describe('getCommissionsWithColumn()', function () {
         // Arrange:
         $commissionType = CommissionType::factory()->create();
         $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
 
         $expectedFixedCommission = Commission::factory()
             ->for($commissionType)
@@ -204,7 +210,7 @@ describe('getCommissionsWithColumn()', function () {
 
         // Act & Assert:
         expect(new CommissionCalculatorService($model))
-            ->getCommissionsWithColumn('amount')
+            ->getCommissionsWithColumn('amount', $commissionGroupId)
             ->toBeArray()
             ->toHaveCount(2)
             ->sequence(
@@ -246,63 +252,6 @@ describe('validateColumnsExistence()', function () {
         expect(fn () => (new CommissionCalculatorService($model))
             ->validateColumnsExistence(['fakeColumn'])
         )->toThrow(Exception::class, 'Column fakeColumn is not numeric');
-    });
-});
-
-describe('setDefaultAttributes()', function () {
-    beforeEach(function () {
-        Schema::shouldReceive('hasColumn')
-            ->andReturn(true);
-    });
-
-    it('can sets default attributes on the model', function () {
-        // Arrange:
-        $product = new Product;
-        $column = 'amount';
-
-        // Act:
-        $service = new CommissionCalculatorService($product);
-        $service->setDefaultAttributes($column);
-
-        // Assert:
-        expect($product)
-            ->current_calculation_column
-            ->toBe($column)
-            ->commission_group_id
-            ->not->toBeNull()
-            ->toBeString();
-    });
-    it('can sets a valid UUID for commission_group_id', function () {
-        // Arrange:
-        $product = new Product;
-        $column = 'amount';
-
-        // Act:
-        $service = new CommissionCalculatorService($product);
-        $service->setDefaultAttributes($column);
-
-        // Assert:
-        expect(Str::isUuid($product->commission_group_id))->toBeTrue();
-    });
-    it('can does not overwrite commission_group_id on subsequent calls', function () {
-        // Arrange:
-        $product = new Product;
-
-        // Act:
-        $service = new CommissionCalculatorService($product);
-
-        $service->setDefaultAttributes('initial_column');
-
-        $initialCommissionGroupId = $product->commission_group_id;
-
-        $service->setDefaultAttributes('new_column');
-
-        // Assert:
-        expect($product)
-            ->commission_group_id
-            ->toBe($initialCommissionGroupId)
-            ->current_calculation_column
-            ->toBe('new_column');
     });
 });
 

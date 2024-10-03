@@ -18,7 +18,7 @@ trait HasCommission
         $commissions = $service->getCalculableCommissions();
 
         return array_map(function (CommissionBundleContext $context) {
-            return CommissionCalculatorFactory::make($context->commission, $this)->calculate($this->{$context->column});
+            return CommissionCalculatorFactory::make($context, $this)->calculate($this->{$context->column});
         }, $commissions);
     }
 }

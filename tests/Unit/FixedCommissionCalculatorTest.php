@@ -8,7 +8,6 @@ use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
 use Mkeremcansev\LaravelCommission\Models\CommissionCalculateHistory;
 use Mkeremcansev\LaravelCommission\Services\Calculators\FixedCommissionCalculator;
-use Mkeremcansev\LaravelCommission\Services\CommissionCalculatorService;
 use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionBundleContext;
 use Mkeremcansev\LaravelCommission\Services\Contexts\FixedCommissionCalculatorContext;
 use Mkeremcansev\LaravelCommission\Services\Pipes\CreateHistoryPipe;
@@ -24,11 +23,10 @@ describe('calculate()', function () {
         $commission = Commission::factory()
             ->withFixedCommission()
             ->create([
-            'amount' => 100,
-            'status' => true,
-            'is_total' => false,
-        ]);
-
+                'amount' => 100,
+                'status' => true,
+                'is_total' => false,
+            ]);
 
         $model = new Product;
         $commissionGroupId = Str::uuid()->toString();
@@ -40,7 +38,6 @@ describe('calculate()', function () {
             CreateHistoryPipe::class,
         ])->andReturnSelf();
         Pipeline::shouldReceive('thenReturn')->once()->andReturn();
-
 
         $context = (new FixedCommissionCalculator($bundleContext, $model))
             ->calculate(100);

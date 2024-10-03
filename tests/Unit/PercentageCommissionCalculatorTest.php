@@ -9,7 +9,6 @@ use Mkeremcansev\LaravelCommission\Enums\CommissionRoundingEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
 use Mkeremcansev\LaravelCommission\Models\CommissionCalculateHistory;
 use Mkeremcansev\LaravelCommission\Services\Calculators\PercentageCommissionCalculator;
-use Mkeremcansev\LaravelCommission\Services\CommissionCalculatorService;
 use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionBundleContext;
 use Mkeremcansev\LaravelCommission\Services\Contexts\PercentageCommissionCalculatorContext;
 use Mkeremcansev\LaravelCommission\Services\Pipes\CreateHistoryPipe;
@@ -260,7 +259,7 @@ describe('calculate()', function () {
                 'rate' => 10.27,
                 'status' => true,
                 'is_total' => false,
-                'rounding' => CommissionRoundingEnum::UP
+                'rounding' => CommissionRoundingEnum::UP,
             ]);
 
         $model = new Product;

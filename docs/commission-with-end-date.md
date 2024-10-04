@@ -34,7 +34,7 @@ $commissionType->commissions()->create([
     'order' => 1
 ]);
 
-// Commission 2: Fixed commission (ACTIVE)
+// Commission 2: Fixed commission (NON-EXPIRED)
 $commissionType->commissions()->create([
     'rate' => null,
     'amount' => 10000, // 10000 = 100.00$

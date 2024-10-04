@@ -232,4 +232,13 @@ describe('get()', function () {
                 }
             );
     });
+    it('cannot return calculation amount for results is empty', function (){
+        $context = new CommissionCalculationResultContext(
+            contexts: [],
+        );
+
+        // Act & Assert:
+        expect($context->get('amount'))
+            ->toBeNull();
+    });
 });

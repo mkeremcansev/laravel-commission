@@ -33,6 +33,8 @@ Laravel Commission is a powerful package designed to simplify the management and
 In summary, Laravel Commission is a versatile and robust solution for managing commissions in Laravel applications, providing developers with the tools they need to implement and customize commission calculations effectively. Whether you're building an e-commerce site, an affiliate platform, or a sales management system, this package can help streamline your commission management processes.
 
 
+---
+
 ## Installation
 
 
@@ -58,6 +60,8 @@ You can publish the config file with:
 ```bash
 php artisan vendor:publish --tag="laravel-commission-config"
 ```
+
+---
 
 ## Usage
 
@@ -104,8 +108,9 @@ The `calculate()` method returns a `\Mkeremcansev\LaravelCommission\Services\Con
 
 **CommissionCalculationResultContext**: If the model `getCommissionableColumns()` method has only one column.
 
+---
+
 ## If you want a commission not to be calculated after a specific date, refer to the following documentation:
-#
 
 - **[Understand the process of defining a start date for a commission, which controls when the commission calculations begin.](docs/commission-with-start-date.md)**
 

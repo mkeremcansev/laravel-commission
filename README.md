@@ -104,7 +104,8 @@ The `calculate()` method returns a `\Mkeremcansev\LaravelCommission\Services\Con
 
 **CommissionCalculationResultContext**: If the model `getCommissionableColumns()` method has only one column.
 
-### If you want a commission not to be calculated after a specific date, refer to the following documentation:
+## If you want a commission not to be calculated after a specific date, refer to the following documentation:
+#
 
 - **[Understand the process of defining a start date for a commission, which controls when the commission calculations begin.](docs/commission-with-start-date.md)**
 

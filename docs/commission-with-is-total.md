@@ -1,4 +1,4 @@
-# Commission with is_total (Integer Calculations)
+# Commission with is_total
 
 In this example, a product is priced at 10000 (100.00$). Two commissions are defined. The first commission is a percentage-based commission calculated as an integer. The second commission, with `is_total` set to `true`, calculates its amount based on the total of the original price and previously calculated commissions.
 

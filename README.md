@@ -89,7 +89,7 @@ php artisan vendor:publish --tag="laravel-commission-config"
    $model = YourModel::find(1);
    $calculatedCommission = $model->calculate('price');
    $calculatedCommission->totalCommissionAmount; // The total commission amount applied
-   $calculatedCommission->totalIncludedPreviousCommissionAmount // The total amount including previous commissions
+   $calculatedCommission->totalIncludedPreviousCommissionAmount; // The total amount including previous commissions
    $calculatedCommission->totalAmount; // The total amount after commissions
    $calculatedCommission->originalAmount; // The original amount before commissions
    ```

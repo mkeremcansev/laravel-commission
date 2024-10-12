@@ -15,7 +15,7 @@ trait HasCommission
     /**
      * @throws Exception
      */
-    public function calculate(string $column = null): CommissionCalculationResultContext|array|null
+    public function calculate(?string $column = null): CommissionCalculationResultContext|array|null
     {
         $service = new CommissionCalculatorService($this);
         $commissions = $service->getCalculableCommissions($column);

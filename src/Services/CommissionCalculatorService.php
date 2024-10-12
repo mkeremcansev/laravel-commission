@@ -23,17 +23,25 @@ class CommissionCalculatorService
     public function __construct(public Model&HasCommissionInterface $model)
     {
         $this->columns = $this->model->getCommissionableColumns();
-
-        $this->validateColumnsExistence($this->columns);
     }
 
     /**
      * @throws Exception
      */
-    public function getCalculableCommissions(): array
+    public function getCalculableCommissions(string $column = null): array
     {
         $commissions = [];
         $commissionGroupId = Str::uuid()->toString();
+
+        if ($column !== null) {
+            $this->validateColumnsExistence([$column]);
+
+            $columnCommissions = $this->getCommissionsWithColumn($column, $commissionGroupId);
+
+            return array_merge($commissions, $columnCommissions);
+        }
+
+        $this->validateColumnsExistence($this->columns);
 
         foreach ($this->columns as $column) {
             $columnCommissions = $this->getCommissionsWithColumn($column, $commissionGroupId);

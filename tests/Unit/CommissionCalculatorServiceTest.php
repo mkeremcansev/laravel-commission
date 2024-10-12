@@ -398,4 +398,43 @@ describe('getCalculableCommissions()', function () {
             });
     });
 
+    it('can returns commissions for incoming parameter column', function () {
+        // Arrange:
+        $model = new Order;
+        $commissionType = CommissionType::factory()->create();
+
+        $expectedFixedCommission = Commission::factory()
+            ->for($commissionType)
+            ->withFixedCommission()
+            ->create();
+
+        $expectedPercentageCommission = Commission::factory()
+            ->for($commissionType)
+            ->withPercentageCommission()
+            ->create();
+
+        CommissionTypeModel::factory()
+            ->for($commissionType)
+            ->withModel($model, true)
+            ->create();
+
+        // Act & Assert:
+        expect(new CommissionCalculatorService($model))
+            ->getCalculableCommissions('amount')
+            ->toBeArray()
+            ->toHaveCount(2)
+            ->sequence(
+                fn (Expectation|CommissionBundleContext $e) => $e->commission->id->toBe($expectedFixedCommission->id),
+                fn (Expectation|CommissionBundleContext $e) => $e->commission->id->toBe($expectedPercentageCommission->id),
+            )
+            ->each(function (Expectation|CommissionBundleContext $context) {
+                $context
+                    ->toBeInstanceOf(CommissionBundleContext::class)
+                    ->commission
+                    ->toBeInstanceOf(Commission::class)
+                    ->column
+                    ->toBe('amount');
+            });
+    });
+
 });

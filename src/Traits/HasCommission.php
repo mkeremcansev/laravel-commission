@@ -15,10 +15,10 @@ trait HasCommission
     /**
      * @throws Exception
      */
-    public function calculate(?string $column = null): CommissionCalculationResultContext|array|null
+    public function calculate(string $column = null): CommissionCalculationResultContext|array|null
     {
         $service = new CommissionCalculatorService($this);
-        $commissions = $service->getCalculableCommissions();
+        $commissions = $service->getCalculableCommissions($column);
 
         $commissions = array_map(function (CommissionBundleContext $context) {
             return CommissionCalculatorFactory::make($context, $this)->calculate($this->{$context->column});

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryReasonEnum;
 use Mkeremcansev\LaravelCommission\Enums\CommissionCalculateHistoryStatusEnum;
 use Mkeremcansev\LaravelCommission\Models\Commission;
+use Mkeremcansev\LaravelCommission\Models\CommissionCalculateHistory;
 use Mkeremcansev\LaravelCommission\Models\CommissionType;
 use Mkeremcansev\LaravelCommission\Models\CommissionTypeModel;
 use Mkeremcansev\LaravelCommission\Services\Contexts\CommissionCalculationResultContext;
@@ -141,6 +142,8 @@ describe('calculate()', function () {
                         }
                     );
             });
+
+        $this->assertDatabaseCount(CommissionCalculateHistory::class, 2);
     });
 
     it('can calculate commissions with multiple columns', function () {
@@ -270,6 +273,8 @@ describe('calculate()', function () {
                         );
                 }
             );
+
+        $this->assertDatabaseCount(CommissionCalculateHistory::class, 4);
     });
 
     it('can calculate commissions with multiple columns but return only incoming parameter column', function () {
@@ -358,5 +363,7 @@ describe('calculate()', function () {
                         ->toBe($model->id);
                 },
             );
+
+        $this->assertDatabaseCount(CommissionCalculateHistory::class, 2);
     });
 });

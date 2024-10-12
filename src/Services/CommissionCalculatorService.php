@@ -28,7 +28,7 @@ class CommissionCalculatorService
     /**
      * @throws Exception
      */
-    public function getCalculableCommissions(string $column = null): array
+    public function getCalculableCommissions(?string $column = null): array
     {
         $commissions = [];
         $commissionGroupId = Str::uuid()->toString();

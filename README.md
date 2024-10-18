@@ -105,6 +105,37 @@ The `calculate()` method returns a `\Mkeremcansev\LaravelCommission\Services\Con
 **CommissionCalculationResultContext**: If the model `getCommissionableColumns()` method has only one column.
 
 
+### Adding Custom Pipes After Commission Calculation
+
+#### 1. Creating a `CustomPipe` Class
+
+Create a pipe class that will run after the commission calculation is done. Each `pipe` class receives the commission calculation context in the `handle` method, allowing you to further process the result. In this example, we use the `BaseCommissionCalculatorContext` class as a type hint for the context:
+
+```php
+use Mkeremcansev\LaravelCommission\Services\Contexts\BaseCommissionCalculatorContext;
+
+class CustomPipe
+{
+    public function handle(BaseCommissionCalculatorContext $context, Closure $next)
+    {
+        // Custom logic after the commission is calculated
+        
+        return $next($context);
+    }
+}
+```
+
+#### 2. Registering the `CustomPipe` Class
+
+Add the `CustomPipe` class to the `commission.pipes` configuration array in the `config/commission.php` file. This configuration array defines the sequence of pipes that will be executed after the commission calculation:
+
+```php
+'pipes' => [
+    CustomPipe::class,
+],
+```
+
+
 ## If you want a commission not to be calculated after a specific date, refer to the following documentation:
 
 - **[Understand the process of defining a start date for a commission, which controls when the commission calculations begin.](docs/commission-with-start-date.md)**

@@ -93,6 +93,17 @@ php artisan vendor:publish --tag="laravel-commission-config"
    $calculatedCommission->totalAmount; // The total amount after commissions
    $calculatedCommission->originalAmount; // The original amount before commissions
    ```
+   **Note**: If you want to calculate based on a custom value instead of using the column value, you can provide a second parameter to the calculate method. For example, `$model->calculate('price', 100)` will calculate the commission based on the value `100` instead of the `price` column value. For example;
+    
+    ```php
+    $model = YourModel::find(1);
+    $calculatedCommission = $model->calculate('price', 100);
+    $calculatedCommission->totalCommissionAmount; // The total commission amount applied
+    $calculatedCommission->totalIncludedPreviousCommissionAmount; // The total amount including previous commissions
+    $calculatedCommission->totalAmount; // The total amount after commissions
+    $calculatedCommission->originalAmount; // The original amount before commissions
+    ```
+
 
 ###  Important Note
 

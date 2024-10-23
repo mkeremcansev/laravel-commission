@@ -74,13 +74,13 @@ describe('calculate()', function () {
                 $context
                     ->toBeInstanceOf(CommissionCalculationResultContext::class)
                     ->totalCommissionAmount
-                    ->toBe(210)
+                    ->toEqual(210)
                     ->totalIncludedPreviousCommissionAmount
-                    ->toBe(0)
+                    ->toEqual(0)
                     ->totalAmount
-                    ->toBe(310)
+                    ->toEqual(310)
                     ->originalAmount
-                    ->toBe(100)
+                    ->toEqual(100)
                     ->contexts
                     ->toHaveCount(2)
                     ->sequence(
@@ -90,7 +90,7 @@ describe('calculate()', function () {
                                 ->commission->id
                                 ->toBe($percentageCommission->id)
                                 ->commission->rate
-                                ->toBe(10.00)
+                                ->toEqual(10.00)
                                 ->commission->amount
                                 ->toBeNull()
                                 ->commission->commission_type_id
@@ -98,11 +98,11 @@ describe('calculate()', function () {
                                 ->model->id
                                 ->toBe($model->id)
                                 ->originalAmount
-                                ->toBe(100)
+                                ->toEqual(100)
                                 ->commissionAmount
-                                ->toBe(10)
+                                ->toEqual(10)
                                 ->totalAmount
-                                ->toBe(110)
+                                ->toEqual(110)
                                 ->status
                                 ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS)
                                 ->reason
@@ -202,13 +202,13 @@ describe('calculate()', function () {
                     $context
                         ->toBeInstanceOf(CommissionCalculationResultContext::class)
                         ->totalCommissionAmount
-                        ->toBe(210)
+                        ->toEqual(210)
                         ->totalIncludedPreviousCommissionAmount
-                        ->toBe(0)
+                        ->toEqual(0)
                         ->totalAmount
-                        ->toBe(310)
+                        ->toEqual(310)
                         ->originalAmount
-                        ->toBe(100)
+                        ->toEqual(100)
                         ->column
                         ->toBe('amount')
                         ->contexts
@@ -239,13 +239,13 @@ describe('calculate()', function () {
                     $context
                         ->toBeInstanceOf(CommissionCalculationResultContext::class)
                         ->totalCommissionAmount
-                        ->toBe(220)
+                        ->toEqual(220)
                         ->totalIncludedPreviousCommissionAmount
-                        ->toBe(0)
+                        ->toEqual(0)
                         ->totalAmount
-                        ->toBe(420)
+                        ->toEqual(420)
                         ->originalAmount
-                        ->toBe(200)
+                        ->toEqual(200)
                         ->column
                         ->toBe('other_column')
                         ->contexts
@@ -331,13 +331,13 @@ describe('calculate()', function () {
         expect($result)
             ->toBeInstanceOf(CommissionCalculationResultContext::class)
             ->totalCommissionAmount
-            ->toBe(210)
+            ->toEqual(210)
             ->totalIncludedPreviousCommissionAmount
-            ->toBe(0)
+            ->toEqual(0)
             ->totalAmount
-            ->toBe(310)
+            ->toEqual(310)
             ->originalAmount
-            ->toBe(100)
+            ->toEqual(100)
             ->column
             ->toBe('amount')
             ->contexts
@@ -421,13 +421,13 @@ describe('calculate()', function () {
         expect($result)
             ->toBeInstanceOf(CommissionCalculationResultContext::class)
             ->totalCommissionAmount
-            ->toBe(210)
+            ->toEqual(210)
             ->totalIncludedPreviousCommissionAmount
-            ->toBe(0)
+            ->toEqual(0)
             ->totalAmount
-            ->toBe(310)
+            ->toEqual(310)
             ->originalAmount
-            ->toBe(100)
+            ->toEqual(100)
             ->column
             ->toBe('amount')
             ->contexts

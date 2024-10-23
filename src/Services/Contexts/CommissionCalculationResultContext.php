@@ -8,10 +8,10 @@ class CommissionCalculationResultContext
 {
     public function __construct(
         public array $contexts,
-        public int $totalCommissionAmount = 0,
-        public int $totalIncludedPreviousCommissionAmount = 0,
-        public int $totalAmount = 0,
-        public int $originalAmount = 0,
+        public int|float $totalCommissionAmount = 0,
+        public int|float $totalIncludedPreviousCommissionAmount = 0,
+        public int|float $totalAmount = 0,
+        public int|float $originalAmount = 0,
         public string $column = ''
     ) {}
 

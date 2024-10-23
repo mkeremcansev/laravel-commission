@@ -546,7 +546,7 @@ describe('round()', function () {
         // Act & Assert:
         expect(new TestCalculator($bundleContext, $model))
             ->round(100.50)
-            ->toBe(101);
+            ->toEqual(101);
     });
 
     it('can round down the amount', function () {
@@ -561,7 +561,7 @@ describe('round()', function () {
         // Act & Assert:
         expect(new TestCalculator($bundleContext, $model))
             ->round(100.50)
-            ->toBe(100);
+            ->toEqual(100);
     });
 });
 

@@ -51,15 +51,15 @@ describe('calculate()', function () {
             ->model
             ->toBe($model)
             ->originalAmount
-            ->toBe(100)
+            ->toEqual(100)
             ->commissionAmount
-            ->toBe(10)
+            ->toEqual(10)
             ->totalAmount
-            ->toBe(110)
+            ->toEqual(110)
             ->includedPreviousCommissionAmount
-            ->toBe(0)
+            ->toEqual(0)
             ->rate
-            ->toBe(10.00)
+            ->toEqual(10.00)
             ->status
             ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS)
             ->reason
@@ -167,15 +167,15 @@ describe('calculate()', function () {
             ->model
             ->toBe($model)
             ->originalAmount
-            ->toBe(100)
+            ->toEqual(100)
             ->commissionAmount
-            ->toBe(40)
+            ->toEqual(40)
             ->totalAmount
-            ->toBe(440)
+            ->toEqual(440)
             ->includedPreviousCommissionAmount
-            ->toBe(300)
+            ->toEqual(300)
             ->rate
-            ->toBe(10.00)
+            ->toEqual(10.00)
             ->status
             ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS)
             ->reason
@@ -284,11 +284,62 @@ describe('calculate()', function () {
             ->model
             ->toBe($model)
             ->originalAmount
-            ->toBe(100)
+            ->toEqual(100)
             ->commissionAmount
-            ->toBe(11)
+            ->toEqual(11)
             ->totalAmount
-            ->toBe(111)
+            ->toEqual(111)
+            ->includedPreviousCommissionAmount
+            ->toEqual(0)
+            ->rate
+            ->toEqual(10.27)
+            ->status
+            ->toBe(CommissionCalculateHistoryStatusEnum::SUCCESS)
+            ->reason
+            ->toBe(CommissionCalculateHistoryReasonEnum::CALCULATED)
+            ->groupId
+            ->toBe($commissionGroupId)
+            ->column
+            ->toBe('amount');
+    });
+    it('can return percentage calculated commission with success status and round none', function (){
+        // Arrange:
+        $commission = Commission::factory()
+            ->withPercentageCommission()
+            ->create([
+                'rate' => 10.27,
+                'status' => true,
+                'is_total' => false,
+                'rounding' => CommissionRoundingEnum::NONE,
+            ]);
+
+        $model = new Product;
+        $commissionGroupId = Str::uuid()->toString();
+        $bundleContext = new CommissionBundleContext($commission, 'amount', $commissionGroupId);
+
+        // Act:
+        Pipeline::shouldReceive('send')->once()->andReturnSelf();
+        Pipeline::shouldReceive('through')->once()->with([
+            CreateHistoryPipe::class,
+        ])->andReturnSelf();
+        Pipeline::shouldReceive('thenReturn')->once()->andReturn();
+
+        $context = (new PercentageCommissionCalculator($bundleContext, $model))
+            ->calculate(27.81);
+
+        // Assert:
+        expect($context)
+            ->toBeInstanceOf(PercentageCommissionCalculatorContext::class)
+            ->commission
+            ->toBe($commission)
+            ->model
+            ->toBe($model)
+            ->originalAmount
+            ->toBe(27.81)
+            ->commissionAmount
+            ->toBe(2.86)
+            ->totalAmount
+            ->toBe(30.67)
             ->includedPreviousCommissionAmount
             ->toBe(0)
             ->rate

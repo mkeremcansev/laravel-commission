@@ -50,7 +50,7 @@ abstract class BaseCalculator
         return $this->context->commission->status;
     }
 
-    public function isInRange(int $amount): bool
+    public function isInRange(int|float $amount): bool
     {
         if ($this->context->commission->min_amount === null && $this->context->commission->max_amount === null) {
             return true;
@@ -67,7 +67,7 @@ abstract class BaseCalculator
         return $this->isAmountAboveMin(amount: $amount) && $this->isAmountBelowMax(amount: $amount);
     }
 
-    public function isAmountAboveMin(int $amount): bool
+    public function isAmountAboveMin(int|float $amount): bool
     {
         if ($this->context->commission->min_amount === null) {
             return true;
@@ -76,7 +76,7 @@ abstract class BaseCalculator
         return $this->context->commission->min_amount <= $amount;
     }
 
-    public function isAmountBelowMax(int $amount): bool
+    public function isAmountBelowMax(int|float $amount): bool
     {
         if ($this->context->commission->max_amount === null) {
             return true;
@@ -85,7 +85,7 @@ abstract class BaseCalculator
         return $amount <= $this->context->commission->max_amount;
     }
 
-    public function status(int $amount): CommissionCalculateHistoryStatusEnum
+    public function status(int|float $amount): CommissionCalculateHistoryStatusEnum
     {
         if ($this->isActive() === true && $this->isStarted() === true && $this->isInRange(amount: $amount) === true && $this->isEnded() === false) {
             return CommissionCalculateHistoryStatusEnum::SUCCESS;
@@ -94,7 +94,7 @@ abstract class BaseCalculator
         return CommissionCalculateHistoryStatusEnum::FAILED;
     }
 
-    public function reason(int $amount): CommissionCalculateHistoryReasonEnum
+    public function reason(int|float $amount): CommissionCalculateHistoryReasonEnum
     {
         if ($this->isActive() === false) {
             return CommissionCalculateHistoryReasonEnum::INACTIVE;
@@ -115,12 +115,14 @@ abstract class BaseCalculator
         return CommissionCalculateHistoryReasonEnum::CALCULATED;
     }
 
-    public function round(float $amount): int
+    public function round(int|float $amount): int|float
     {
-        return (int) match ($this->context->commission->rounding) {
+        return match ($this->context->commission->rounding) {
             CommissionRoundingEnum::UP => ceil($amount),
             CommissionRoundingEnum::DOWN => floor($amount),
-            default => round($amount),
+            CommissionRoundingEnum::NONE => is_float($amount)
+                ? (floor($amount) == $amount ? (int) $amount : round($amount, 2))
+                : $amount,
         };
     }
 }

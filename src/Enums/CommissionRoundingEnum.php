@@ -12,4 +12,5 @@ enum CommissionRoundingEnum: int
 
     case UP = 1;
     case DOWN = 2;
+    case NONE = 3;
 }

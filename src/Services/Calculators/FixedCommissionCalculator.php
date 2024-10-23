@@ -16,7 +16,7 @@ class FixedCommissionCalculator extends BaseCalculator implements CommissionCalc
     /**
      * @throws Exception
      */
-    public function calculate(int $amount): BaseCommissionCalculatorContext
+    public function calculate(int|float $amount): BaseCommissionCalculatorContext
     {
         $status = $this->status(amount: $amount);
         $reason = $this->reason(amount: $amount);

@@ -8,5 +8,5 @@ use Mkeremcansev\LaravelCommission\Services\Contexts\BaseCommissionCalculatorCon
 
 interface CommissionCalculatorInterface
 {
-    public function calculate(int $amount): BaseCommissionCalculatorContext;
+    public function calculate(int|float $amount): BaseCommissionCalculatorContext;
 }

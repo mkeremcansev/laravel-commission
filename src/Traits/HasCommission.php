@@ -15,7 +15,7 @@ trait HasCommission
     /**
      * @throws Exception
      */
-    public function calculate(?string $column = null, int|float $amount = null): CommissionCalculationResultContext|array|null
+    public function calculate(?string $column = null, int|float|null $amount = null): CommissionCalculationResultContext|array|null
     {
         if ($column === null && $amount !== null) {
             throw new Exception('Column name must be provided when custom amount is provided.');

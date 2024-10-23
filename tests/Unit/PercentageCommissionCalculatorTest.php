@@ -302,7 +302,7 @@ describe('calculate()', function () {
             ->column
             ->toBe('amount');
     });
-    it('can return percentage calculated commission with success status and round none', function (){
+    it('can return percentage calculated commission with success status and round none', function () {
         // Arrange:
         $commission = Commission::factory()
             ->withPercentageCommission()

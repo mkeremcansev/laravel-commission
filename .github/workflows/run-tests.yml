@@ -33,7 +33,7 @@ jobs:
             pest-plugin-laravel: ^3.1
           - laravel: 10.*
             testbench: 8.*
-            pest: ^2.34.7
+            pest: ^2.7.0
             pest-plugin-laravel: ^2.4.0
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
     steps:

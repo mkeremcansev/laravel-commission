@@ -25,13 +25,16 @@ jobs:
         include:
           - laravel: 12.*
             testbench: 10.*
+            pest: ^3.7.0
             pest-plugin-laravel: ^3.1
           - laravel: 11.*
             testbench: 9.*
+            pest: ^3.7.0
             pest-plugin-laravel: ^3.1
           - laravel: 10.*
             testbench: 8.*
-            pest-plugin-laravel: ^2.0
+            pest: ^2.34.7
+            pest-plugin-laravel: ^2.4.0
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -48,7 +51,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "pestphp/pest-plugin-laravel:${{ matrix.pest-plugin-laravel }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "pestphp/pest:${{ matrix.pest }}" "pestphp/pest-plugin-laravel:${{ matrix.pest-plugin-laravel }}" --dev --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
       - name: List Installed Dependencies
         run: composer show -D

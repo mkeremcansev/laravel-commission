@@ -22,17 +22,11 @@ jobs:
         stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 12.*
-            testbench: 10.*
-            pest: ^3.7
-            collision: ^8.6
+            testbench: ^10.0
           - laravel: 11.*
-            testbench: 9.*
-            pest: ^3.7
-            collision: ^8.6
+            testbench: ^9.0
           - laravel: 10.*
-            testbench: 8.*
-            pest: ^2.0
-            collision: ^7.0
+            testbench: ^8.0
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -47,19 +41,10 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
           coverage: none
 
-      - name: Setup problem matchers
-        run: |
-          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" \
-                          "orchestra/testbench:${{ matrix.testbench }}" \
-                          "pestphp/pest:${{ matrix.pest }}" \
-                          "nunomaduro/collision:${{ matrix.collision }}" \
-                          --dev --no-interaction --no-update
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --dev --no-interaction --no-update
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction --ignore-platform-reqs
 
       - name: List Installed Dependencies
         run: composer show -D

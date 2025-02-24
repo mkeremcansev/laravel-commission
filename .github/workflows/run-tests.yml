@@ -38,6 +38,7 @@ jobs:
             pest: ^2.7.0
             pest-plugin-laravel: ^2.4.0
             pest-plugin-arch: ^2.7.0
+            doctrine-dbal: ^3.0
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -54,7 +55,10 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "pestphp/pest:${{ matrix.pest }}" "pestphp/pest-plugin-laravel:${{ matrix.pest-plugin-laravel }}" "pestphp/pest-plugin-arch:${{ matrix.pest-plugin-arch }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "pestphp/pest:${{ matrix.pest }}" "pestphp/pest-plugin-laravel:${{ matrix.pest-plugin-laravel }}" "pestphp/pest-plugin-arch:${{ matrix.pest-plugin-arch }}" --dev --no-interaction --no-update
+          if [ -n "${{ matrix.doctrine-dbal }}" ]; then
+            composer require "doctrine/dbal:${{ matrix.doctrine-dbal }}" --dev --no-interaction --no-update
+          fi
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
       - name: List Installed Dependencies
         run: composer show -D
